@@ -7,7 +7,8 @@ from tkinter import messagebox
 from tkinter import ttk
 from tkinter import filedialog as fd
 from lxml import etree as ET
-
+from py_files.get_basetext import get_basetext, create_full_reference
+from py_files.export_docx import export_docx
 
 def disable_enable_buttons(current, app):
     # set verse nav buttons
@@ -43,7 +44,6 @@ def disable_enable_buttons(current, app):
 def update_index(current, app):
     verse = re.sub("-APP", "", current.get('verse'))
     apps = current.findall('app')
-    global i_from, i_to
     if app == None:
         i_from = 0
         i_to = -1
@@ -68,12 +68,12 @@ def update_index(current, app):
                 app_label.config(bg="spring green")
     ref_entry.delete(0, END)
     ref_entry.insert(0, verse)
-    get_basetext()
+    fill_basetext(i_from, i_to)
     get_arcs(app)
 
 def refill(current):
     verse = re.sub("-APP", "", current.get('verse'))
-    global app, i_from, i_to, tree
+    global app, tree
     app = current.find('app')
     apps = current.findall('app')
     for widget in temp_frame.winfo_children():
@@ -95,7 +95,6 @@ def refill(current):
         get_arcs(app)
     ref_entry.delete(0, END)
     ref_entry.insert(0, verse)
-    get_basetext()
 
 def updater(change, direction):
     global tree, app
@@ -132,8 +131,7 @@ def updater(change, direction):
     disable_enable_buttons(current, app)
 
 def browse():
-    xml_dir = fd.askopenfilename(
-        initialdir=f"{main_dir}/Collation/open-cbgm/Collations")
+    xml_dir = fd.askopenfilename(initialdir=f"{main_dir}/collations")
     xml_dir_entry.insert(0, xml_dir)
 
 def get_arcs(app):
@@ -208,21 +206,11 @@ def prev_index_cmd():
 def next_index_cmd():
     updater("index", "next")
 
-def get_basetext():
+def fill_basetext(i_from, i_to):
     ref = str(ref_entry.get())
-    ref = ref.split('.')
-    chp = ref[0]
-    vrs = ref[1]
-    rp_fname = f"{main_dir}/mss/RP/Plain Text Transcriptions/RP_{chp}.txt"
-    # Get verse from basetext
-    with open(rp_fname, 'r', encoding='utf-8') as file:
-        basetext = file.read()
-        pass
-    basetext = re.search(vrs + r"(.+)", basetext)
-    basetext = re.sub(vrs, "", basetext.group(0))
-    basetext = basetext.strip().split()
+    basetext = get_basetext(ref, main_dir)
     index_list = []
-    global i_from, i_to, index, tree
+    global index, tree
     for i in range(i_from, i_to+1):
         if i % 2 == 0:
             index_list.append(str(i))
@@ -305,106 +293,9 @@ def delete_arc():
                 arc_label.pack(side=TOP)
         write_new_xml()
 
-def export_docx():
-    from docx import Document
+def export_app_as_docx():
     global tree
-    root = tree.getroot()
-    document = Document(f"{main_dir}/template.docx")
-    document.add_heading('Critical Apparatus\n', 0)
-
-    ab_elements = root.findall("ab")
-    for ab in ab_elements:
-        apps = ab.findall('app')
-        verse = ab.get("verse")
-        verse = re.sub("-APP", "", verse)
-        full_verse = re.sub("R", "\nRomans ", verse)
-        full_verse = re.sub(r"\.", ":", full_verse)
-
-        document.add_heading(full_verse, level=1)
-
-        ref = re.sub(r"\.", " ", verse)
-        ref = ref.split()
-        chp = ref[0]
-        vrs = ref[1]
-        rp_fname = f"{main_dir}/mss/RP/Plain Text Transcriptions/RP_{chp}.txt"
-        # Get RP verse for display and also the ECM style index nums
-        with open(rp_fname, 'r', encoding='utf-8') as file:
-            basetext = file.readlines()
-            pass
-        for line in basetext:
-            if line.startswith(vrs):
-                line = re.sub(vrs, "", line)
-                basetext = line.strip().split()
-        index = []
-        count = 2
-
-        for i in range(len(basetext)):
-            count_str = str(count)
-            index.append(count_str)
-            count += 2
-
-        verse_length = len(basetext)
-
-        cell = 0
-        if verse_length <= 15:
-            table = document.add_table(rows=1, cols=verse_length)
-            row_cells = table.add_row().cells
-            for x, y in zip(index, basetext):
-                row_cells[cell].text = f"{x}\n{y}"
-                cell += 1
-
-        elif verse_length <= 30:
-            # index_a = index[:15]
-            # basetext_a = basetext[:15]
-
-            table = document.add_table(rows=1, cols=15)
-            row_cells = table.add_row().cells
-
-            for x, y in zip(index[:15], basetext[:15]):
-                row_cells[cell].text = f"{x}\n{y}"
-                cell += 1
-            cell = 0
-            row_cells = table.add_row().cells
-            for x, y in zip(index[15:], basetext[15:]):
-                row_cells[cell].text = f"{x}\n{y}"
-                cell += 1
-
-        else:
-            table = document.add_table(rows=1, cols=15)
-            row_cells = table.add_row().cells
-
-            for x, y in zip(index[:15], basetext[:15]):
-                row_cells[cell].text = f"{x}\n{y}"
-                cell += 1
-
-            cell = 0
-            row_cells = table.add_row().cells
-            for x, y in zip(index[15:30], basetext[15:30]):
-                row_cells[cell].text = f"{x}\n{y}"
-                cell += 1
-            
-            cell = 0
-            row_cells = table.add_row().cells
-            for x, y in zip(index[30:], basetext[30:]):
-                row_cells[cell].text = f"{x}\n{y}"
-                cell += 1
-
-        for app in apps:
-            p = document.add_paragraph("\n"+app.get('from')+"–"+app.get('to')).underline = True
-            rdgs = app.findall('rdg')
-            for rdg in rdgs:
-                if rdg.text:
-                    greek_text = rdg.text
-                    p = document.add_paragraph(f"Reading {rdg.get('n')}: ")
-                    p.add_run(greek_text).bold = True
-                    p.add_run(f"\t\t{rdg.get('wit')}")
-                else:
-                    greek_text = rdg.get('type')
-                    p = document.add_paragraph(f"Reading {rdg.get('n')}: ")
-                    p.add_run(greek_text).bold = True
-                    p.add_run(f"\t\t{rdg.get('wit')}")
-
-    document.save("apparatus.docx")
+    export_docx(tree, main_dir)
     print("Apparatus exported as docx")
 
 """GUI Startup"""
@@ -420,8 +311,8 @@ if my_os == "Windows":
     ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 main = Tk()
-main.title("Apparatus Explorer v.03")
-main.iconbitmap(main_dir+"/console.ico")
+main.title("Apparatus Explorer v.04")
+main.iconbitmap(main_dir+"/files/console.ico")
 
 # FRAMES
 
@@ -477,7 +368,7 @@ save_xml_btn = Button(xml_dir_frame,
 save_xml_btn.grid(row=0, column=4, padx=10)
 
 export_button = Button(xml_dir_frame, text="Export docx",
-        font=("Times", "12"), command=export_docx)
+        font=("Times", "12"), command=export_app_as_docx)
 export_button.grid(row=0, column=5, padx=10)
 
 prev_vrs_btn = Button(ref_frame, text="<Prev", font=("Times", "12"),
