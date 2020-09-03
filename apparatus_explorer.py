@@ -173,7 +173,7 @@ def load_xml():
     if cx_fname == "":
         messagebox.showinfo(title="Uh-oh", 
         message="File path field is blank. Type in the file path\
-             (location) or click 'Browse'")
+(location) or click 'Browse'")
     else:
         with open(cx_fname, 'r', encoding='utf-8') as file:
             tree = file.read()
@@ -298,7 +298,7 @@ def export_app_as_docx():
     export_docx(tree, main_dir)
     print("Apparatus exported as docx")
 
-"""GUI Startup"""
+# GUI Startup
 tree = None
 main_dir = os.getcwd()
 main_dir = re.sub(r"\\", "/", main_dir)

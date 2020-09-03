@@ -33,7 +33,8 @@ The Apparatus Explorer extracts the relevant verse from a basetext file for show
 
 Basetext formatting:
 1. The basetext file needs to be a plain text file `.txt`
-2. One verse per line with a standard reference at the beginning of every line. Examples:
+2. One verse per line
+3. SBL style reference at the beginning of every line. Examples:
 
 `Rom 13:5 διο αναγκη υποτασσεσθαι ου μονον δια την οργην αλλα και δια την συνειδησιν`
 

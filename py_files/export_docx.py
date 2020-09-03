@@ -1,7 +1,8 @@
-from lxml import etree as ET
+import datetime
 import re
-from py_files.get_basetext import get_basetext
+from lxml import etree as ET
 from docx import Document
+from py_files.get_basetext import get_basetext
 
 def export_docx(tree, main_dir):
     root = tree.getroot()
@@ -86,4 +87,10 @@ def export_docx(tree, main_dir):
                     p.add_run(greek_text).bold = True
                     p.add_run(f"\t\t{rdg.get('wit')}")
 
-    document.save(f"{main_dir}/exported/apparatus.docx")
+    now = datetime.datetime.now()
+    now_date = now.strftime('%x')
+    now_date = now_date.replace('/', '-')
+    now_time = now.strftime('%X')
+    now_time = now_time.replace(':', '-')
+    datetime_to_append = f"{now_date}_{now_time}"
+    document.save(f"{main_dir}/exported/apparatus--{datetime_to_append}.docx")

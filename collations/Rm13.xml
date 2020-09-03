@@ -24,9 +24,9 @@
       </listWit>
     </sourceDesc>
   </teiHeader>
-  <ab xml:id="R13.5-APP">
+  <ab xml:id="Rm13.5-APP">
     <seg>ου μονον δια την οργην αλλα</seg>
-    <app from="14" n="R13.5" to="14" type="main">
+    <app from="14" n="Rm13.5" to="14" type="main">
       <lem wit="RP">και</lem>
       <rdg n="a" varSeq="1" wit="01 0150 0151 02 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">και</rdg>
       <rdg n="b" type="om" varSeq="2" wit="010 012"/>
@@ -44,9 +44,9 @@
     </app>
     <seg>δια την συνειδησιν</seg>
   </ab>
-  <ab xml:id="R13.6-APP">
+  <ab xml:id="Rm13.6-APP">
     <seg>δια τουτο γαρ και φορους τελειτε λειτουργοι</seg>
-    <app from="16" n="R13.6" to="16" type="main">
+    <app from="16" n="Rm13.6" to="16" type="main">
       <lem wit="RP">γαρ</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 02 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">γαρ</rdg>
       <rdg n="b" type="om" varSeq="2" wit="0151"/>
@@ -63,7 +63,7 @@
       </note>
     </app>
     <seg>θεου εισιν εις αυτο</seg>
-    <app from="26" n="R13.6" to="26" type="main">
+    <app from="26" n="Rm13.6" to="26" type="main">
       <lem wit="RP">τουτο</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 03 06 1319 1505 1573 1739 2110 33 365 NA28 RP">τουτο</rdg>
       <rdg n="b" varSeq="2" wit="1506">του</rdg>
@@ -81,9 +81,9 @@
     </app>
     <seg>προσκαρτερουντες</seg>
   </ab>
-  <ab xml:id="R13.7-APP">
+  <ab xml:id="Rm13.7-APP">
     <seg>αποδοτε</seg>
-    <app from="4" n="R13.7" to="4" type="main">
+    <app from="4" n="Rm13.7" to="4" type="main">
       <lem wit="RP">ουν</lem>
       <rdg n="a" varSeq="1" wit="010 012 0151 1319 1505 1573 33 365 RP">ουν</rdg>
       <rdg n="b" type="om" varSeq="2" wit="01 0150 02 03 06 1506 1739 2110 NA28"/>
@@ -100,7 +100,7 @@
       </note>
     </app>
     <seg>πασιν τας οφειλας τω τον φορον τον φορον</seg>
-    <app from="22" n="R13.7" to="22" type="main">
+    <app from="22" n="Rm13.7" to="22" type="main">
       <lem wit="RP">τω</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 03 06 1505 1506 1573 1739 2110 33 365 NA28 RP">τω</rdg>
       <rdg n="b" type="om" varSeq="2" wit="1319"/>
@@ -116,7 +116,7 @@
         </graph>
       </note>
     </app>
-    <app from="24" n="R13.7" to="26" type="main">
+    <app from="24" n="Rm13.7" to="26" type="main">
       <lem wit="RP">το τελος</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0151 02 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">το τελος</rdg>
       <rdg n="b" type="om" varSeq="2" wit="0150"/>
@@ -134,9 +134,9 @@
     </app>
     <seg>το τελος τω τον φοβον τον φοβον τω την τιμην την τιμην</seg>
   </ab>
-  <ab xml:id="R13.8-APP">
+  <ab xml:id="Rm13.8-APP">
     <seg>μηδενι μηδεν</seg>
-    <app from="6" n="R13.8" to="6" type="main">
+    <app from="6" n="Rm13.8" to="6" type="main">
       <lem wit="RP">οφειλετε</lem>
       <rdg n="a" varSeq="1" wit="010 012 0150 0151 02 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">οφειλετε</rdg>
       <rdg n="b" varSeq="2" wit="01">οφιλοντες</rdg>
@@ -153,7 +153,7 @@
       </note>
     </app>
     <seg>ει μη το</seg>
-    <app from="14" n="R13.8" to="16" type="main">
+    <app from="14" n="Rm13.8" to="16" type="main">
       <lem wit="RP">αγαπαν αλληλους</lem>
       <rdg n="a" varSeq="1" wit="0151 1505 33 RP">αγαπαν αλληλους</rdg>
       <rdg n="b" varSeq="2" wit="01 010 012 0150 02 03 06 1319 1506 1573 1739 2110 365 NA28">αλληλους αγαπαν</rdg>
@@ -170,7 +170,7 @@
       </note>
     </app>
     <seg>ο γαρ</seg>
-    <app from="22" n="R13.8" to="22" type="main">
+    <app from="22" n="Rm13.8" to="22" type="main">
       <lem wit="RP">αγαπων</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0151 02 03 06 1319 1505 1506 1573 1739 365 NA28 RP">αγαπων</rdg>
       <rdg n="b" varSeq="2" wit="0150 2110 33">αγαπον</rdg>
@@ -187,7 +187,7 @@
       </note>
     </app>
     <seg>τον ετερον νομον</seg>
-    <app from="30" n="R13.8" to="30" type="main">
+    <app from="30" n="Rm13.8" to="30" type="main">
       <lem wit="RP">πεπληρωκεν</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0151 02 03 06 1319 1505 1506 1573 1739 33 365 NA28 RP">πεπληρωκεν</rdg>
       <rdg n="b" varSeq="2" wit="0150 2110">πεπληρoκεν</rdg>
@@ -204,8 +204,8 @@
       </note>
     </app>
   </ab>
-  <ab xml:id="R13.9-APP">
-    <app from="1" n="R13.9" to="1" type="main">
+  <ab xml:id="Rm13.9-APP">
+    <app from="1" n="Rm13.9" to="1" type="main">
       <lem type="om" wit="RP"/>
       <rdg n="a" type="om" varSeq="1" wit="01 0150 0151 02 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP"/>
       <rdg n="b" varSeq="2" wit="010 012">γεγραπται</rdg>
@@ -222,7 +222,7 @@
       </note>
     </app>
     <seg>το γαρ ου μοιχευσεις</seg>
-    <app from="10" n="R13.9" to="12" type="main">
+    <app from="10" n="Rm13.9" to="12" type="main">
       <lem wit="RP">ου φονευσεις</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 03 06 1319 1505 1506 1573 2110 33 365 NA28 RP">ου φονευσεις</rdg>
       <rdg n="b" type="om" varSeq="2" wit="1739"/>
@@ -239,7 +239,7 @@
       </note>
     </app>
     <seg>ου κλεψεις</seg>
-    <app from="17" n="R13.9" to="17" type="main">
+    <app from="17" n="Rm13.9" to="17" type="main">
       <lem type="om" wit="RP"/>
       <rdg n="a" type="om" varSeq="1" wit="010 012 0151 02 03 06 1573 1739 33 NA28 RP"/>
       <rdg n="b" varSeq="2" wit="01 0150 1319 1506 2110 365">ου ψευδομαρτυρησεις</rdg>
@@ -257,7 +257,7 @@
         </graph>
       </note>
     </app>
-    <app from="18" n="R13.9" to="20" type="main">
+    <app from="18" n="Rm13.9" to="20" type="main">
       <lem wit="RP">ουκ επιθυμησεις</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 03 06 1319 1506 1573 1739 2110 33 365 NA28 RP">ουκ επιθυμησεις</rdg>
       <rdg n="b" varSeq="2" wit="1505">ου ψευδομαρτυρησεις</rdg>
@@ -274,7 +274,7 @@
       </note>
     </app>
     <seg>και</seg>
-    <app from="24" n="R13.9" to="24" type="main">
+    <app from="24" n="Rm13.9" to="24" type="main">
       <lem wit="RP">ει</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0151 02 03 06 1319 1505 1573 1739 33 365 NA28 RP">ει</rdg>
       <rdg n="b" varSeq="2" wit="0150 1506 2110">η</rdg>
@@ -291,7 +291,7 @@
       </note>
     </app>
     <seg>τις ετερα</seg>
-    <app from="29" n="R13.9" to="29" type="main">
+    <app from="29" n="Rm13.9" to="29" type="main">
       <lem type="om" wit="RP"/>
       <rdg n="a" type="om" varSeq="1" wit="010 012 0151 03 06 1319 1505 1506 1573 1739 365 NA28 RP"/>
       <rdg n="b" varSeq="2" wit="01 0150 02 2110 33">εστιν</rdg>
@@ -308,7 +308,7 @@
       </note>
     </app>
     <seg>εντολη εν</seg>
-    <app from="34" n="R13.9" to="38" type="main">
+    <app from="34" n="Rm13.9" to="38" type="main">
       <lem wit="RP">τουτω τω λογω</lem>
       <rdg n="a" varSeq="1" wit="0150 0151 02 2110 RP">τουτω τω λογω</rdg>
       <rdg n="b" varSeq="2" wit="01 010 012 03 06 1319 1505 1573 1739 365 NA28">τω λογω τουτω</rdg>
@@ -329,7 +329,7 @@
       </note>
     </app>
     <seg>ανακεφαλαιουται</seg>
-    <app from="42" n="R13.9" to="44" type="main">
+    <app from="42" n="Rm13.9" to="44" type="main">
       <lem wit="RP">εν τω</lem>
       <rdg n="a" varSeq="1" wit="01 0150 0151 02 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">εν τω</rdg>
       <rdg n="b" type="om" varSeq="2" wit="010 012 03"/>
@@ -346,7 +346,7 @@
       </note>
     </app>
     <seg>αγαπησεις τον πλησιον σου ως</seg>
-    <app from="56" n="R13.9" to="56" type="main">
+    <app from="56" n="Rm13.9" to="56" type="main">
       <lem wit="RP">σεαυτον</lem>
       <rdg n="a" varSeq="1" wit="01 0150 02 03 06 1505 1506 1739 2110 NA28 RP">σεαυτον</rdg>
       <rdg n="b" varSeq="2" wit="010 012 0151 1319 1573 33 365">εαυτον</rdg>
@@ -363,8 +363,8 @@
       </note>
     </app>
   </ab>
-  <ab xml:id="R13.10-APP">
-    <app from="2" n="R13.10" to="4" type="main">
+  <ab xml:id="Rm13.10-APP">
+    <app from="2" n="Rm13.10" to="4" type="main">
       <lem wit="RP">η αγαπη</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">η αγαπη</rdg>
       <rdg n="b" type="om" varSeq="2" wit="02"/>
@@ -380,7 +380,7 @@
         </graph>
       </note>
     </app>
-    <app from="6" n="R13.10" to="6" type="main">
+    <app from="6" n="Rm13.10" to="6" type="main">
       <lem wit="RP">τω</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 03 06 1505 1739 2110 33 NA28 RP">τω</rdg>
       <rdg n="b" varSeq="2" wit="1319 1573 365">τον</rdg>
@@ -400,7 +400,7 @@
         </graph>
       </note>
     </app>
-    <app from="8" n="R13.10" to="10" type="main">
+    <app from="8" n="Rm13.10" to="10" type="main">
       <lem wit="RP">πλησιον κακον</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">πλησιον κακον</rdg>
       <rdg n="b" type="om" varSeq="2" wit="02"/>
@@ -416,7 +416,7 @@
         </graph>
       </note>
     </app>
-    <app from="12" n="R13.10" to="14" type="main">
+    <app from="12" n="Rm13.10" to="14" type="main">
       <lem wit="RP">ουκ εργαζεται</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 03 1319 1506 1573 2110 NA28 RP">ουκ εργαζεται</rdg>
       <rdg n="b" varSeq="2" wit="06 1505 33 365">ου κατεργαζεται</rdg>
@@ -437,7 +437,7 @@
       </note>
     </app>
     <seg>πληρωμα</seg>
-    <app from="18" n="R13.10" to="18" type="main">
+    <app from="18" n="Rm13.10" to="18" type="main">
       <lem wit="RP">ουν</lem>
       <rdg n="a" varSeq="1" wit="01 0150 0151 02 03 1319 1505 1506 1573 1739 2110 33 NA28 RP">ουν</rdg>
       <rdg n="b" varSeq="2" wit="010 012 06">δε</rdg>
@@ -457,9 +457,9 @@
     </app>
     <seg>νομου η αγαπη</seg>
   </ab>
-  <ab xml:id="R13.11-APP">
+  <ab xml:id="Rm13.11-APP">
     <seg>και</seg>
-    <app from="4" n="R13.11" to="4" type="main">
+    <app from="4" n="Rm13.11" to="4" type="main">
       <lem wit="RP">τουτο</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 03 06 1319 1505 1506 1573 1739 2110 365 NA28 RP">τουτο</rdg>
       <rdg n="b" varSeq="2" wit="33">τουτω</rdg>
@@ -475,7 +475,7 @@
         </graph>
       </note>
     </app>
-    <app from="6" n="R13.11" to="6" type="main">
+    <app from="6" n="Rm13.11" to="6" type="main">
       <lem wit="RP">ειδοτες</lem>
       <rdg n="a" varSeq="1" wit="01 012 0150 0151 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">ειδοτες</rdg>
       <rdg n="b" varSeq="2" wit="010 02">ιδοντες</rdg>
@@ -492,7 +492,7 @@
       </note>
     </app>
     <seg>τον καιρον οτι</seg>
-    <app from="14" n="R13.11" to="18" type="main">
+    <app from="14" n="Rm13.11" to="18" type="main">
       <lem wit="RP">ωρα ημας ηδη</lem>
       <rdg n="a" varSeq="1" wit="010 012 0151 33 RP">ωρα ημας ηδη</rdg>
       <rdg n="b" varSeq="2" wit="01 02 03 1319 1506 365 NA28">ωρα ηδη υμας</rdg>
@@ -512,7 +512,7 @@
         </graph>
       </note>
     </app>
-    <app from="19" n="R13.11" to="19" type="main">
+    <app from="19" n="Rm13.11" to="19" type="main">
       <lem type="om" wit="RP"/>
       <rdg n="a" type="om" varSeq="1" wit="01 010 012 0150 02 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP"/>
       <rdg n="b" varSeq="2" wit="0151">ως</rdg>
@@ -529,7 +529,7 @@
       </note>
     </app>
     <seg>εξ</seg>
-    <app from="22" n="R13.11" to="22" type="main">
+    <app from="22" n="Rm13.11" to="22" type="main">
       <lem wit="RP">υπνου</lem>
       <rdg n="a" varSeq="1" wit="01 0150 0151 02 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">υπνου</rdg>
       <rdg n="b" varSeq="2" wit="010 012">υπνους</rdg>
@@ -545,7 +545,7 @@
         </graph>
       </note>
     </app>
-    <app from="24" n="R13.11" to="24" type="main">
+    <app from="24" n="Rm13.11" to="24" type="main">
       <lem wit="RP">εγερθηναι</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 03 06 1319 1505 1506 1573 1739 2110 365 NA28 RP">εγερθηναι</rdg>
       <rdg n="b" varSeq="2" wit="33">εξεγερθηναι</rdg>
@@ -562,7 +562,7 @@
       </note>
     </app>
     <seg>νυν</seg>
-    <app from="28" n="R13.11" to="28" type="main">
+    <app from="28" n="Rm13.11" to="28" type="main">
       <lem wit="RP">γαρ</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 03 06 1319 1506 1573 1739 2110 33 NA28 RP">γαρ</rdg>
       <rdg n="b" type="om" varSeq="2" wit="1505 365"/>
@@ -579,7 +579,7 @@
       </note>
     </app>
     <seg>εγγυτερον</seg>
-    <app from="32" n="R13.11" to="32" type="main">
+    <app from="32" n="Rm13.11" to="32" type="main">
       <lem wit="RP">ημων</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 02 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">ημων</rdg>
       <rdg n="b" type="om" varSeq="2" wit="0151"/>
@@ -597,9 +597,9 @@
     </app>
     <seg>η σωτηρια η οτε επιστευσαμεν</seg>
   </ab>
-  <ab xml:id="R13.12-APP">
+  <ab xml:id="Rm13.12-APP">
     <seg>η νυξ προεκοψεν η δε ημερα</seg>
-    <app from="14" n="R13.12" to="14" type="main">
+    <app from="14" n="Rm13.12" to="14" type="main">
       <lem wit="RP">ηγγικεν</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">ηγγικεν</rdg>
       <rdg n="b" varSeq="2" wit="02">ηγγισεν</rdg>
@@ -615,7 +615,7 @@
         </graph>
       </note>
     </app>
-    <app from="16" n="R13.12" to="16" type="main">
+    <app from="16" n="Rm13.12" to="16" type="main">
       <lem wit="RP">αποθωμεθα</lem>
       <rdg n="a" varSeq="1" wit="01 0150 0151 02 03 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">αποθωμεθα</rdg>
       <rdg n="b" varSeq="2" wit="010 012 06">αποβαλωμεθα</rdg>
@@ -632,7 +632,7 @@
       </note>
     </app>
     <seg>ουν τα εργα του σκοτους</seg>
-    <app from="28" n="R13.12" to="28" type="main">
+    <app from="28" n="Rm13.12" to="28" type="main">
       <lem wit="RP">και</lem>
       <rdg n="a" varSeq="1" wit="010 012 0150 0151 1319 1505 1506 1573 2110 33 365 RP">και</rdg>
       <rdg n="b" type="om" varSeq="2" wit="01 02 03 06 1739 NA28"/>
@@ -649,7 +649,7 @@
       </note>
     </app>
     <seg>ενδυσωμεθα</seg>
-    <app from="31" n="R13.12" to="31" type="main">
+    <app from="31" n="Rm13.12" to="31" type="main">
       <lem type="om" wit="RP"/>
       <rdg n="a" type="om" varSeq="1" wit="01 010 012 0151 1319 1505 1573 33 365 RP"/>
       <rdg n="b" varSeq="2" wit="0150 02 03 06 1506 1739 2110 NA28">δε</rdg>
@@ -665,7 +665,7 @@
         </graph>
       </note>
     </app>
-    <app from="32" n="R13.12" to="32" type="main">
+    <app from="32" n="Rm13.12" to="32" type="main">
       <lem wit="RP">τα</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 03 06 1319 1505 1506 1573 1739 2110 365 NA28 RP">τα</rdg>
       <rdg n="b" type="om" varSeq="2" wit="33"/>
@@ -681,7 +681,7 @@
         </graph>
       </note>
     </app>
-    <app from="34" n="R13.12" to="34" type="main">
+    <app from="34" n="Rm13.12" to="34" type="main">
       <lem wit="RP">οπλα</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 03 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">οπλα</rdg>
       <rdg n="b" varSeq="2" wit="0151 02 06">εργα</rdg>
@@ -699,9 +699,9 @@
     </app>
     <seg>του φωτος</seg>
   </ab>
-  <ab xml:id="R13.13-APP">
+  <ab xml:id="Rm13.13-APP">
     <seg>ως εν ημερα ευσχημονως περιπατησωμεν μη</seg>
-    <app from="14" n="R13.13" to="14" type="main">
+    <app from="14" n="Rm13.13" to="14" type="main">
       <lem wit="RP">κωμοις</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 03 06 1319 1573 1739 2110 33 365 NA28 RP">κωμοις</rdg>
       <rdg n="b" varSeq="2" wit="1506">κομης</rdg>
@@ -720,7 +720,7 @@
       </note>
     </app>
     <seg>και μεθαις μη κοιταις και ασελγειαις μη</seg>
-    <app from="30" n="R13.13" to="30" type="main">
+    <app from="30" n="Rm13.13" to="30" type="main">
       <lem wit="RP">εριδι</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 06 1319 1505 1506 1573 2110 33 365 NA28 RP">εριδι</rdg>
       <rdg n="b" varSeq="2" wit="03 1739">ερισι</rdg>
@@ -737,7 +737,7 @@
       </note>
     </app>
     <seg>και</seg>
-    <app from="34" n="R13.13" to="34" type="main">
+    <app from="34" n="Rm13.13" to="34" type="main">
       <lem wit="RP">ζηλω</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">ζηλω</rdg>
       <rdg n="b" varSeq="2" wit="03">ζηλοις</rdg>
@@ -754,9 +754,9 @@
       </note>
     </app>
   </ab>
-  <ab xml:id="R13.14-APP">
+  <ab xml:id="Rm13.14-APP">
     <seg>αλλ ενδυσασθε τον</seg>
-    <app from="8" n="R13.14" to="12" type="main">
+    <app from="8" n="Rm13.14" to="12" type="main">
       <lem wit="RP">κυριον ιησουν χριστον</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0150 0151 02 06 1319 1505 1506 1573 2110 33 365 NA28 RP">κυριον ιησουν χριστον</rdg>
       <rdg n="b" varSeq="2" wit="1739">κυριον ιησουν</rdg>
@@ -774,7 +774,7 @@
         </graph>
       </note>
     </app>
-    <app from="14" n="R13.14" to="14" type="main">
+    <app from="14" n="Rm13.14" to="14" type="main">
       <lem wit="RP">και</lem>
       <rdg n="a" varSeq="1" wit="01 0150 0151 02 03 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">και</rdg>
       <rdg n="b" type="om" varSeq="2" wit="010 012 06"/>
@@ -791,7 +791,7 @@
       </note>
     </app>
     <seg>της σαρκος προνοιαν μη ποιεισθε</seg>
-    <app from="26" n="R13.14" to="26" type="main">
+    <app from="26" n="Rm13.14" to="26" type="main">
       <lem wit="RP">εις</lem>
       <rdg n="a" varSeq="1" wit="01 0150 0151 02 03 06 1319 1505 1506 1573 1739 2110 33 365 NA28 RP">εις</rdg>
       <rdg n="b" varSeq="2" wit="010 012">εν</rdg>
@@ -807,7 +807,7 @@
         </graph>
       </note>
     </app>
-    <app from="28" n="R13.14" to="28" type="main">
+    <app from="28" n="Rm13.14" to="28" type="main">
       <lem wit="RP">επιθυμιας</lem>
       <rdg n="a" varSeq="1" wit="01 010 012 0151 03 06 1319 1505 1573 1739 33 365 NA28 RP">επιθυμιας</rdg>
       <rdg n="b" varSeq="2" wit="0150 02 1506 2110">επιθυμιαν</rdg>
