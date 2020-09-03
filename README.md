@@ -2,7 +2,7 @@
 ![demonstration gif](images/demonstration.gif)
 
 This tool does three things:
-* Visualization of an XML encoded critical apparatus
+* Visualization of a TEI XML encoded critical apparatus
 * Conveniently adds edges to variation units
 * Exports the XML apparatus to a formatted docx file
 
@@ -50,7 +50,7 @@ I have included an example collation file, an example basetext file, and a suita
 
 To test the tool using these examples, download or clone this repository.
 - Windows: open `apparatus_explorer.exe`
-- Any platform with Python 3.6+ installed: execute `apparatus_explorer`
+- Any platform with Python 3.6+ installed: execute `apparatus_explorer.py`
 1. Click 'Browse' and navigate to `Apparatus Explorer/collations` and open `R13.xml`. This will load a collation of Romans 13:5-14 that I edited.
     - The data for 01, 02, 03, and 33 are from the INTF NT.VMR TEI XML transcriptions (https://ntvmr.uni-muenster.de/manuscript-workspace). The data for 018, 0150, 0151, 1506, and 2110 are the result of my research. The rest of the data was taken from Reuben J. Swanson, _New Testament Greek Manuscripts: Variant Readings Arranged in Horizontal Lines against Codex Vaticanus: Romans_ (2001).
 2. Click "Load/Refresh XML File. Navigate between different verses by either 1) using the top level 'Prev' and 'Next' buttons, or 2) typing in a reference into the top input field and then clicking "Load/Refresh XML File" to update the screen.
