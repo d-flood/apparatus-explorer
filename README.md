@@ -1,12 +1,12 @@
-# apparatus-explorer
+# Apparatus Explorer
 ![demonstration gif](images/demonstration.gif)
 
-This tool does three three things:
+This tool does three things:
 * Visualization of an XML encoded critical apparatus
 * Conveniently adds edges to variation units
 * Exports the XML apparatus to a formatted docx file
 
-This apparatus explorer was designed to prepare an XML collation file for use in Joey McCollum's open-cbgm library (https://github.com/jjmccollum/open-cbgm-standalone). The open-cbgm library allows for genealogical directions between variants to be encoded into the XML collation input file and and utilized in various outputs. The apparatus explorer helps this process by presenting the user with the basetext, readings, witnesses, and the option to add and delete the relationships between variants (edges, or `<arc>` elements in the XML file).
+This Apparatus Explorer was designed to prepare an XML collation file for use in Joey McCollum's open-cbgm library (https://github.com/jjmccollum/open-cbgm-standalone). The open-cbgm library allows for genealogical directions between variants to be encoded into the XML collation input file and utilized in various outputs. The Apparatus Explorer helps this process by presenting the user with the basetext, readings, witnesses, and the option to add and delete the relationships between variants (edges, or `<arc>` elements in the XML file).
 
 Since this tool was developed for use in New Testament Textual Criticism, it can also export the critical apparatus as a formatted docx file for print and publication.
 ![docx output](images/docx_output.png)
@@ -23,13 +23,13 @@ For all other platforms, Python 3.6+ is required in addition to the following li
 Presently, this will only work with a specifically prepared XML file:
 1. Begin with the XML output from the Collation Editor from ITSEE at the University of Birmingham (https://github.com/itsee-birmingham/standalone_collation_editor).
     - The Collation Editor works best one verse at a time. This will produce many single-verse collation files. These should be combined into chapter and whole book collation files.
-    - I have a few other Python scripts that automate this proces; I plan to publish these as well.
+    - I have a few other Python scripts that automate this process; I plan to publish these as well.
 
 2. Use Joey McCollum's itsee-to-open-cbgm python script to reformat the Collation Editor output (https://github.com/jjmccollum/itsee-to-open-cbgm).
 3. Save the XML collation file to `/collations`
 
 ### Basetext
-The apparatus explorer extracts the relavent verse from a basetext file for showing the context of witness readings. The basetext file should be the same as the one used with ITSEE's Collation Editor.
+The Apparatus Explorer extracts the relevant verse from a basetext file for showing the context of witness readings. The basetext file should be the same as the one used with ITSEE's Collation Editor.
 
 Basetext formatting:
 1. The basetext file needs to be a plain text file `.txt`
@@ -50,4 +50,8 @@ I have included an example collation file, an example basetext file, and a suita
 
 To test the tool using these examples, download or clone this repository.
 - Windows: open `apparatus_explorer.exe`
-- Any platform with Python 3.6+ installed: execute `apparatus_explorer
+- Any platform with Python 3.6+ installed: execute `apparatus_explorer`
+1. Click 'Browse' and navigate to `Apparatus Explorer/collations` and open `R13.xml`. This will load a collation of Romans 13:5-14 that I edited.
+    - The data for 01, 02, 03, and 33 are from the INTF NT.VMR TEI XML transcriptions (https://ntvmr.uni-muenster.de/manuscript-workspace). The data for 018, 0150, 0151, 1506, and 2110 are the result of my research. The rest of the data was taken from Reuben J. Swanson, _New Testament Greek Manuscripts: Variant Readings Arranged in Horizontal Lines against Codex Vaticanus: Romans_ (2001).
+2. Click "Load/Refresh XML File. Navigate between different verses by either 1) using the top level 'Prev' and 'Next' buttons, or 2) typing in a reference into the top input field and then clicking "Load/Refresh XML File" to update the screen.
+3. The XML file is automatically saved any time that an `<arc>` element is added or deleted using the "Edit Relationships" frame. It is still important to select "Save and Exit" before using the file with the open-cbgm. Loading the XML file into the Apparatus Explorer applies a few slight modifications that are restored when clicking "Save and Exit." The collation file will still load correctly into the Apparatus Explorer if this is forgotten, so it can be remedied any time prior to being processed by the open-cbgm library.
