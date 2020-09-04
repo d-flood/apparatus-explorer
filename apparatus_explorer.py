@@ -21,21 +21,27 @@ def disable_enable_buttons(current, app):
     else:
         next_vrs_btn.config(state=NORMAL)
     # set index prev button
-    app_prev = app.getprevious()
-    if app_prev == None:
-        prev_index_button.config(state=DISABLED)
-    elif app_prev.tag == "seg":
-        app_prev = app_prev.getprevious()
+    try:
+        app_prev = app.getprevious()
+        if app_prev == None:
+            prev_index_button.config(state=DISABLED)
+        elif app_prev.tag == "seg":
+            app_prev = app_prev.getprevious()
+    except:
+        app_prev = None
     if app_prev == None:
         prev_index_button.config(state=DISABLED)
     else:
         prev_index_button.config(state=NORMAL)
     # set index next button
-    app_next = app.getnext()
-    if app_next == None:
-        next_index_button.config(state=DISABLED)
-    elif app_next.tag == "seg":
-        app_next = app_next.getnext()
+    try:
+        app_next = app.getnext()
+        if app_next == None:
+            next_index_button.config(state=DISABLED)
+        elif app_next.tag == "seg":
+            app_next = app_next.getnext()
+    except:
+        app_next = None
     if app_next == None:
         next_index_button.config(state=DISABLED)
     else:
@@ -55,13 +61,19 @@ def update_index(current, app):
     temp_frame.pack(side=LEFT)
     # find and display all variation indexes
     if apps == []:
-        app_label = Label(index_frame, text="No Variation Units",
+        app_label = Label(temp_frame, text="No Variation Units",
                     font=("Times", "12"))
         app_label.pack(side=LEFT, padx=10)
     else:
-        index = app.get('from')+" - "+app.get('to')
+        if app.get('from') == app.get('to'):
+            index = app.get('from')
+        else:
+            index = app.get('from')+" - "+app.get('to')
         for app_unit in apps:
-            app_index = f"{app_unit.get('from')} - {app_unit.get('to')}"
+            if app_unit.get('from') == app_unit.get('to'):
+                app_index = app_unit.get('from')
+            else:
+                app_index = f"{app_unit.get('from')} - {app_unit.get('to')}"
             app_label = Label(temp_frame, text=app_index, font=("Times", "12"))
             app_label.pack(side=LEFT, padx=15)
             if app_index == index:
@@ -71,31 +83,6 @@ def update_index(current, app):
     fill_basetext(i_from, i_to)
     get_arcs(app)
 
-def refill(current):
-    verse = re.sub("-APP", "", current.get('verse'))
-    global app, tree
-    app = current.find('app')
-    apps = current.findall('app')
-    for widget in temp_frame.winfo_children():
-        widget.destroy()
-    temp_frame.pack(side=LEFT)
-    # find and display all variation indexes
-    if apps == []:
-        app_label = Label(
-            index_frame, text="No Variation Units", font=("Times", "12"))
-        app_label.pack(side=LEFT, padx=10)
-    else:
-        index = app.get('from')+" - "+app.get('to')
-        for app_unit in apps:
-            app_index = f"{app_unit.get('from')} - {app_unit.get('to')}"
-            app_label = Label(temp_frame, text=app_index, font=("Times", "12"))
-            app_label.pack(side=LEFT, padx=15)
-            if app_index == index:
-                app_label.config(bg="spring green")
-        get_arcs(app)
-    ref_entry.delete(0, END)
-    ref_entry.insert(0, verse)
-
 def updater(change, direction):
     global tree, app
     root = tree.getroot()
@@ -104,12 +91,14 @@ def updater(change, direction):
         current = root.find(f".//ab[@verse='{ab}']")
         if direction == "next":
             current = current.getnext()
-            refill(current)
+            # refill(current)
         elif direction == "prev":
             current = current.getprevious()
-            refill(current)
+            # refill(current)
         elif direction == "None":
-            refill(current)
+            # refill(current)
+            pass
+        app = current.find('app')
     elif change == "index":
         current = root.find(f".//ab[@verse='{ab}']")
         if direction == "next":
@@ -123,10 +112,10 @@ def updater(change, direction):
     elif change == "initial startup":
         if ref_entry.get() == "":
             current = root.find("ab")
-            app = current.find('app')
         else:
             current = root.find(f".//ab[@verse='{ab}']")
-            refill(current)
+            # refill(current)
+        app = current.find('app')
     update_index(current, app)
     disable_enable_buttons(current, app)
 
@@ -140,7 +129,11 @@ def get_arcs(app):
         pass
     else:
         rdgs = app.findall('rdg')
-        for widget in rdgs_frame.winfo_children():
+        for widget in rdgs_left_frame.winfo_children():
+            widget.destroy()
+        for widget in rdgs_wits_frame.winfo_children():
+            widget.destroy()
+        for widget in rdgs_type_frame.winfo_children():
             widget.destroy()
         for rdg in rdgs:
             if rdg.text:
@@ -148,10 +141,15 @@ def get_arcs(app):
             else:
                 greek_text = rdg.get('type')
             rdg_label = Label(
-                rdgs_frame, 
-                text=f"{rdg.get('n')}  {greek_text}\t{rdg.get('wit')}", 
-                font=("Times", "12"), wraplength=1000)
+                rdgs_left_frame, 
+                text=f"{rdg.get('n')}   {greek_text}", 
+                font=("Times", "12"), wraplength=1000, padx=3)
             rdg_label.pack(side=TOP, anchor=W)
+            rdg_wits = Label(
+                rdgs_wits_frame, width=100,
+                text=f"{rdg.get('wit').replace(' ', '  ')}", anchor='w',
+                font=("Times", "12"), wraplength=1000)
+            rdg_wits.pack(side=TOP)
         arcs = app.findall('note/graph/arc')
         for widget in gen_frame.winfo_children():
             widget.destroy()
@@ -332,6 +330,15 @@ basetext_frame.grid(row=2, column=0, columnspan=3, pady=10, padx=10)
 
 rdgs_frame = LabelFrame(main, text="Readings", font=("Times", "12"))
 rdgs_frame.grid(row=4, column=0, columnspan=3, pady=10, padx=10)
+
+rdgs_left_frame = LabelFrame(rdgs_frame, borderwidth=0)
+rdgs_left_frame.pack(side=LEFT, padx=10)
+
+rdgs_wits_frame = LabelFrame(rdgs_frame, borderwidth=0)
+rdgs_wits_frame.pack(side=LEFT, padx=10)
+
+rdgs_type_frame = LabelFrame(rdgs_frame, borderwidth=0)
+rdgs_type_frame.pack(side=LEFT, padx=10)
 
 gen_frame = LabelFrame(main, text="Genealogical Relationships", 
             font=("Times", "12"))
