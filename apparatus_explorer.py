@@ -146,7 +146,7 @@ def get_arcs(app):
                 font=("Times", "12"), wraplength=1000, padx=3)
             rdg_label.pack(side=TOP, anchor=W)
             rdg_wits = Label(
-                rdgs_wits_frame, width=100,
+                rdgs_wits_frame, width=75,
                 text=f"{rdg.get('wit').replace(' ', '  ')}", anchor='w',
                 font=("Times", "12"), wraplength=1000)
             rdg_wits.pack(side=TOP)
@@ -405,11 +405,14 @@ delete_arc_button.grid(row=0, column=5, padx=10)
 
 # ENTRY WIDGETS
 
+def on_enter(event):
+    add_arc()    
 arc_entry_1 = Entry(edit_arc_frame, width=3, font=("Times", "12"))
 arc_entry_1.grid(row=0, column=1, padx=10)
-
+arc_entry_1.bind('<Return>', on_enter)
 arc_entry_2 = Entry(edit_arc_frame, width=3, font=("Times", "12"))
 arc_entry_2.grid(row=0, column=3, padx=10)
+arc_entry_2.bind('<Return>', on_enter)
 
 xml_dir_entry = Entry(xml_dir_frame, width=50, font=("Times", "12"))
 xml_dir_entry.grid(row=0, column=1)
