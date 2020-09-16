@@ -1,10 +1,11 @@
 # Apparatus Explorer
-![demonstration gif](images/demonstration_v.04.gif)
+![demonstration gif](images/demonstration_v.05.gif)
 
-This tool does three things:
+This tool does does a few things:
 * Visualization of a TEI XML encoded critical apparatus
 * Conveniently adds edges to variation units
 * Exports the XML apparatus to a formatted docx file
+* Can make, display, and save local stemma graphs with GraphViz
 
 This Apparatus Explorer was designed to prepare an XML collation file for use in Joey McCollum's open-cbgm library (https://github.com/jjmccollum/open-cbgm-standalone). The open-cbgm library allows for genealogical directions between variants to be encoded into the XML collation input file and utilized in various outputs. The Apparatus Explorer helps this process by presenting the user with the basetext, readings, witnesses, and the option to add and delete the relationships between variants (edges, or `<arc>` elements in the XML file).
 
@@ -12,11 +13,12 @@ Since this tool was developed for use in New Testament Textual Criticism, it can
 ![docx output](images/docx_output.png)
 
 ## Dependencies
-There are no dependencies for Windows users if the windows executable is used by opening `apparatus_explorer.exe` from the root folder.
 
-For all other platforms, Python 3.6+ is required in addition to the following libraries:
+Python 3.6+ is required in addition to the following libraries:
 - `lxml` --mandatory
 - `python-docx` --only needed when exporting to docx
+
+[GraphViz](https://graphviz.org/) is optional. If GraphViz is installed and added to path, the Apparatus Explorer will display a PNG graph of the local stemma and save the graph to `/graphs`. If GraphViz is not installed, the Apparatus Explorer will display a plain text representation of the same data.
 
 ## Brief Tutorial
 ### XML Collation File
