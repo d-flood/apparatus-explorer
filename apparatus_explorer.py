@@ -2,6 +2,7 @@ import ctypes
 import os
 import platform
 import re
+from distutils.spawn import find_executable
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
@@ -9,6 +10,7 @@ from tkinter import filedialog as fd
 from lxml import etree as ET
 from py_files.get_basetext import get_basetext, create_full_reference
 from py_files.export_docx import export_docx
+from py_files.make_graph import make_graph #, resize_png
 
 def disable_enable_buttons(current, app):
     # set verse nav buttons
@@ -81,7 +83,7 @@ def update_index(current, app):
     ref_entry.delete(0, END)
     ref_entry.insert(0, verse)
     fill_basetext(i_from, i_to)
-    get_arcs(app)
+    get_arcs(app, index)
 
 def updater(change, direction):
     global tree, app
@@ -91,12 +93,9 @@ def updater(change, direction):
         current = root.find(f".//ab[@verse='{ab}']")
         if direction == "next":
             current = current.getnext()
-            # refill(current)
         elif direction == "prev":
             current = current.getprevious()
-            # refill(current)
         elif direction == "None":
-            # refill(current)
             pass
         app = current.find('app')
     elif change == "index":
@@ -114,8 +113,10 @@ def updater(change, direction):
             current = root.find("ab")
         else:
             current = root.find(f".//ab[@verse='{ab}']")
-            # refill(current)
         app = current.find('app')
+    elif change == "arc update":
+        current = root.find(f".//ab[@verse='{ab}']")
+
     update_index(current, app)
     disable_enable_buttons(current, app)
 
@@ -123,7 +124,7 @@ def browse():
     xml_dir = fd.askopenfilename(initialdir=f"{main_dir}/collations")
     xml_dir_entry.insert(0, xml_dir)
 
-def get_arcs(app):
+def get_arcs(app, index):
     global tree
     if app == None:
         pass
@@ -151,8 +152,13 @@ def get_arcs(app):
                 font=("Times", "12"), wraplength=1000)
             rdg_wits.pack(side=TOP)
         arcs = app.findall('note/graph/arc')
-        for widget in gen_frame.winfo_children():
-            widget.destroy()
+        populate_relationships(arcs, index)
+
+
+def populate_relationships(arcs, index):
+    for widget in gen_frame.winfo_children():
+        widget.destroy()
+    if does_dot_exist == None:
         if arcs == []:
             arc_label = Label(gen_frame, text="No Arcs Present",
                         font=("Times", "12"))
@@ -164,6 +170,19 @@ def get_arcs(app):
                     text=f"{arc.get('from')} --> {arc.get('to')}", 
                     font=("Times", "12"))
                 arc_label.pack(side=TOP)
+    else:
+        if arcs == []:
+            nodes = app.findall('note/graph/node')
+        else:
+            nodes = None
+        filename = make_graph(arcs, index, ref_entry.get(), nodes)
+        filename = f'{filename}.png'
+        graph_image = PhotoImage(file=f'files/graphs/{filename}')
+        arc_label = Label(
+            gen_frame, image=graph_image, 
+            height=350, width=400, bg=main_color)
+        arc_label.image = graph_image
+        arc_label.pack()
 
 def load_xml():
     global tree
@@ -251,19 +270,7 @@ def add_arc():
         arc.set('to', arc_entry_2.get())
         arc_parent = app.find("note/graph")
         arc_parent.append(arc)
-        arcs = app.findall('note/graph/arc')
-        for widget in gen_frame.winfo_children():
-            widget.destroy()
-        if arcs == []:
-            arc_label = Label(gen_frame, text="No Arcs Present",
-                        font=("Times", "12"))
-            arc_label.pack(side=TOP)
-        else:
-            for item in arcs:
-                arc_label = Label(gen_frame,
-                            text=f"{item.get('from')} --> {item.get('to')}",
-                            font=("Times", "12"))
-                arc_label.pack(side=TOP)
+        updater('arc update', 'None')
         write_new_xml()
     
 def delete_arc():
@@ -276,30 +283,37 @@ def delete_arc():
         for arc in arcs:
             if arc.get('from') == arc_entry_1.get() and arc.get('to') == arc_entry_2.get():
                 arc.getparent().remove(arc)
-        for widget in gen_frame.winfo_children():
-            widget.destroy()
-        arcs = app.findall('note/graph/arc')
-        if arcs == []:
-            arc_label = Label(gen_frame, text="No Arcs Present",
-                font=("Times", "12"))
-            arc_label.pack(side=TOP)
-        else:
-            for arc in arcs:
-                arc_label = Label(gen_frame,
-                    text=f"{arc.get('from')} --> {arc.get('to')}",
-                    font=("Times", "12"))
-                arc_label.pack(side=TOP)
+        updater('arc update', 'None')
         write_new_xml()
 
 def export_app_as_docx():
     global tree
-    export_docx(tree, main_dir)
-    print("Apparatus exported as docx")
+    result = export_docx(tree, main_dir)
+    if result == None:
+        pass
+    else:
+        print(result)
 
-# GUI Startup
-tree = None
+# make sure temp directories exist
 main_dir = os.getcwd()
 main_dir = re.sub(r"\\", "/", main_dir)
+
+temp_directories = (
+    f'{main_dir}/exported', 
+    f'{main_dir}/files/dot', 
+    f'{main_dir}/files/graphs'
+    )
+
+for temp_directory in temp_directories:
+    try:
+        os.mkdir(temp_directory)
+    except FileExistsError:
+        print(f'{temp_directory} already exists')
+
+# GUI Startup
+does_dot_exist = find_executable('dot')
+
+tree = None
 
 # tkinter seems to have a scaling issue on high-resolution screens on Windows.
 # The following seems to solve the issue. If GUI is blurry, try changing
@@ -309,9 +323,12 @@ if my_os == "Windows":
     ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 main = Tk()
-main.title("Apparatus Explorer v.04")
+main.title("Apparatus Explorer v.05")
 main.iconbitmap(main_dir+"/files/console.ico")
 
+main_color = '#f4f4f4'
+
+main.config(bg=main_color)
 # FRAMES
 
 xml_dir_frame  = LabelFrame(main, text="")
@@ -341,12 +358,16 @@ rdgs_type_frame = LabelFrame(rdgs_frame, borderwidth=0)
 rdgs_type_frame.pack(side=LEFT, padx=10)
 
 gen_frame = LabelFrame(main, text="Genealogical Relationships", 
-            font=("Times", "12"))
+            font=("Times", "12"), bg=main_color)
 gen_frame.grid(row=5, column=0, pady=10, padx=10)
 
 edit_arc_frame = LabelFrame(main, text="Edit Relationships",
                 font=("Times", "12"))
-edit_arc_frame.grid(row=5, column=1, padx=10, pady=10)
+edit_arc_frame.grid(row=5, column=1, padx=20, pady=20)
+
+# edit_rdg_type = LabelFrame(main, text='Edit Reading Type',
+#                 font=('Times', '12'))
+# edit_rdg_type.grid(row=5, column=2, padx=20, pady=20)
 
 # LABELS
 xml_dir_label = Label(xml_dir_frame, text="XML Collation File Path: ",
@@ -397,11 +418,11 @@ next_index_button.pack(side=RIGHT, padx=10)
 
 update_arc_button = Button(edit_arc_frame, text="Add", font=("Times", "12"),
                     command=add_arc)
-update_arc_button.grid(row=0, column=4, padx=10)
+update_arc_button.grid(row=0, column=4, padx=30, pady=30)
 
 delete_arc_button = Button(edit_arc_frame, text="Delete", 
                     font=("Times", "12"), command=delete_arc)
-delete_arc_button.grid(row=0, column=5, padx=10)
+delete_arc_button.grid(row=0, column=5, padx=30, pady=30)
 
 # ENTRY WIDGETS
 
@@ -420,5 +441,8 @@ xml_dir_entry.grid(row=0, column=1)
 ref_entry = Entry(ref_frame, width=30, font=("Times", "12"))
 ref_entry.grid(row=0, column=1, padx=50)
 
+# other widgets
+# rdg_type_combobox = ttk.Combobox(edit_rdg_type, values=['test', 'test1'])
+# rdg_type_combobox.pack()
 
 main.mainloop()

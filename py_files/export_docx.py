@@ -1,10 +1,14 @@
 import datetime
 import re
 from lxml import etree as ET
-from docx import Document
 from py_files.get_basetext import get_basetext
 
 def export_docx(tree, main_dir):
+    try:
+        from docx import Document
+    except:
+        print('Could not import python-docx. Make sure it is installed: https://pypi.org/project/python-docx/')
+        return
     root = tree.getroot()
     document = Document(f"{main_dir}/files/template.docx")
     document.add_heading('Critical Apparatus\n', 0)
@@ -14,7 +18,7 @@ def export_docx(tree, main_dir):
         apps = ab.findall('app')
         verse = ab.get("verse")
         verse = re.sub("-APP", "", verse)
-        full_verse = re.sub("R", "\nRomans ", verse)
+        full_verse = re.sub("Rm", "\nRomans ", verse)
         full_verse = re.sub(r"\.", ":", full_verse)
 
         document.add_heading(full_verse, level=1)
@@ -97,3 +101,4 @@ def export_docx(tree, main_dir):
     now_time = now_time.replace(':', '-')
     datetime_to_append = f"{now_date}_{now_time}"
     document.save(f"{main_dir}/exported/apparatus--{datetime_to_append}.docx")
+    return 'Apparatus converted to docx and saved to /exported'
