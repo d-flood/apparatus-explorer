@@ -1,4 +1,5 @@
 # Apparatus Explorer
+![screenshot](images/screenshot.png)
 ![demonstration gif](images/demonstration_v.05.gif)
 
 This tool does does a few things:
