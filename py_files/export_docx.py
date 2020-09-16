@@ -73,7 +73,10 @@ def export_docx(tree, main_dir):
                 cell += 1
 
         for app in apps:
-            p = document.add_paragraph("\n"+app.get('from')+"–"+app.get('to')).underline = True
+            if app.get('from') == app.get('to'):
+                p = document.add_paragraph("\n"+app.get('from')).underline = True
+            else:
+                p = document.add_paragraph("\n"+app.get('from')+"–"+app.get('to')).underline = True
             rdgs = app.findall('rdg')
             for rdg in rdgs:
                 if rdg.text:
