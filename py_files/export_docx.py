@@ -7,8 +7,7 @@ def export_docx(tree, main_dir):
     try:
         from docx import Document
     except:
-        print('Could not import python-docx. Make sure it is installed: https://pypi.org/project/python-docx/')
-        return
+        return 'could not import python-docx.\nMake sure it is installed: https://pypi.org/project/python-docx/'
     root = tree.getroot()
     document = Document(f"{main_dir}/files/template.docx")
     document.add_heading('Critical Apparatus\n', 0)

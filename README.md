@@ -23,13 +23,14 @@ Python 3.6+ is required in addition to the following libraries:
 
 ## Brief Tutorial
 ### XML Collation File
-Presently, this will only work with a specifically prepared XML file:
+
 1. Begin with the XML output from the Collation Editor from ITSEE at the University of Birmingham (https://github.com/itsee-birmingham/standalone_collation_editor).
     - The Collation Editor works best one verse at a time. This will produce many single-verse collation files. These should be combined into chapter and whole book collation files.
     - I have a few other Python scripts that automate this process; I plan to publish these as well.
 
-2. Use Joey McCollum's itsee-to-open-cbgm python script to reformat the Collation Editor output (https://github.com/jjmccollum/itsee-to-open-cbgm).
-3. Save the XML collation file to `/collations`
+2. Save the XML collation file to `/collations`
+
+3. Previously, one had to then reformat the XML file with Joey McCollum's itsee-to-open-cbgm utility (https://github.com/jjmccollum/itsee-to-open-cbgm). Now I have included this utility in the Apparatus Explorer. The Apparatus Explorer will ask the user if it should reformat the XML file. Click 'Ok' at the prompt to create a reformatted copy of the collation file. It will automatically be saved and loaded into the Apparatus Explorer. When loading the same collation in the future, be sure to select the reformatted version. By default, the reformatted copy's file name ends with `_reformatted.xml`.
 
 ### Basetext
 The Apparatus Explorer extracts the relevant verse from a basetext file for showing the context of witness readings. The basetext file should be the same as the one used with ITSEE's Collation Editor.

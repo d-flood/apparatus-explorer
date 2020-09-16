@@ -4,13 +4,13 @@ import platform
 import re
 from distutils.spawn import find_executable
 from tkinter import *
-from tkinter import messagebox
-from tkinter import ttk
+from tkinter import messagebox, ttk
 from tkinter import filedialog as fd
 from lxml import etree as ET
 from py_files.get_basetext import get_basetext, create_full_reference
 from py_files.export_docx import export_docx
 from py_files.make_graph import make_graph #, resize_png
+from py_files.itsee_to_open_cbgm.itsee_to_open_cbgm import reformat_xml
 
 def disable_enable_buttons(current, app):
     # set verse nav buttons
@@ -121,7 +121,8 @@ def updater(change, direction):
     disable_enable_buttons(current, app)
 
 def browse():
-    xml_dir = fd.askopenfilename(initialdir=f"{main_dir}/collations")
+    xml_dir = fd.askopenfilename(
+        initialdir=f'{main_dir}/collations')
     xml_dir_entry.insert(0, xml_dir)
 
 def get_arcs(app, index):
@@ -191,24 +192,40 @@ def load_xml():
         messagebox.showinfo(title="Uh-oh", 
         message="File path field is blank. Type in the file path\
 (location) or click 'Browse'")
+    elif '.xml' not in cx_fname:
+        messagebox.showwarning(title='Uh-oh', 
+        message="Input must be an XML (.xml) output file from the ITSEE Collation Editor")
     else:
         with open(cx_fname, 'r', encoding='utf-8') as file:
             tree = file.read()
-        tree = re.sub("xml:id", "verse", tree)
-        tree = re.sub("<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">", "<TEI>", tree)
-        tree = re.sub("<?xml version='1.0' encoding='UTF-8'?>", "", tree)
-        with open(cx_fname, 'w', encoding='utf-8') as file:
-            file.write(tree)
-        parser = ET.XMLParser(remove_blank_text=True)
-        tree = ET.parse(cx_fname, parser)
-        updater("initial startup", "None")
+        see_if_reformatted = re.search('<teiHeader>', tree)
+        if see_if_reformatted == None:
+            user_response = messagebox.askokcancel(
+                message='The XML input file needs to be reformatted.\n\
+select "Ok" to reformat the XML input using an\n\
+included utility created by Joey McCollum')
+            if user_response == True:
+                reformatted_path = reformat_xml(cx_fname)
+                xml_dir_entry.delete(0, END)
+                xml_dir_entry.insert(0, reformatted_path)
+                load_xml()
+            else:
+                return None
+        else:
+            tree = re.sub("xml:id", "verse", tree)
+            tree = re.sub("<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">", "<TEI>", tree)
+            tree = re.sub("<?xml version='1.0' encoding='UTF-8'?>", "", tree)
+            with open(cx_fname, 'w', encoding='utf-8') as file:
+                file.write(tree)
+            parser = ET.XMLParser(remove_blank_text=True)
+            tree = ET.parse(cx_fname, parser)
+            updater("initial startup", "None")
 
 def save_exit():
     if tree == None:
         pass
     else:
         write_new_xml()
-        print("XML File Saved")
     main.destroy()
 
 def prev_btn_cmd():
@@ -289,10 +306,7 @@ def delete_arc():
 def export_app_as_docx():
     global tree
     result = export_docx(tree, main_dir)
-    if result == None:
-        pass
-    else:
-        print(result)
+    messagebox.showinfo(message=result)
 
 # make sure temp directories exist
 main_dir = os.getcwd()
@@ -308,7 +322,7 @@ for temp_directory in temp_directories:
     try:
         os.mkdir(temp_directory)
     except FileExistsError:
-        print(f'{temp_directory} already exists')
+        pass
 
 # GUI Startup
 does_dot_exist = find_executable('dot')
