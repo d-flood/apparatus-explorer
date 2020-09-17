@@ -5,10 +5,10 @@ def make_graph(arcs, index, ref, nodes):
     graph_data = ''
     if nodes == None:
         for arc in arcs:
-            graph_data = f'{graph_data}\n{arc.get("from")} -> {arc.get("to")} [fillcolor="orange"]'
+            graph_data = f'\t{graph_data}{arc.get("from")} -> {arc.get("to")} [fillcolor="orange"]\n'
     else:
         for node in nodes:
-            graph_data = f'{graph_data}\n{node.get("n")} [fillcolor="orange"]'
+            graph_data = f'\t{graph_data}{node.get("n")} [fillcolor="orange"]\n'
     
     with open('files/template.dot', 'r', encoding='utf-8') as template_fn:
         template = template_fn.read()
