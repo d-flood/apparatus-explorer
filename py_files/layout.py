@@ -253,6 +253,8 @@ class Layout:
                         rdg_type_text = 'defi\t'
                     elif rdg.get('type') == 'lac':
                         rdg_type_text = 'lacu\t'
+                    elif rdg.get('type') == 'subreading':
+                        rdg_type_text = 'subr'
                     else:
                         rdg_type_text = f'{rdg.get("type")}\t'
                 else:
