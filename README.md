@@ -7,6 +7,7 @@ This tool does does a few things:
 * Exports the XML apparatus to a formatted docx file
 * Can make, display, and save local stemma graphs with GraphViz
 * Can combine single-verse output from the ITSEE Collation Editor into one file (e.g., into chapter or book length files).
+* This is a companion tool to [Tendon](https://github.com/d-flood/tendon/), which was designed for guiding the process of transcription to collation, while Apparatus Explorer is for editing the collation ouput.
 
 
 ![combine files screenshot](images/combine_files_screenshot.png)
