@@ -1,5 +1,5 @@
 # Apparatus Explorer
-![screenshot](images/screenshot.png)
+![screenshot](images/example.gif)
 ![demonstration gif](images/demonstration_v.05.gif)
 This tool does does a few things:
 * Visualization of a TEI XML encoded critical apparatus
