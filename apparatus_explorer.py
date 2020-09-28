@@ -1,5 +1,6 @@
 import ctypes
 import os
+import pathlib
 import platform
 import re
 from distutils.spawn import find_executable
@@ -19,8 +20,7 @@ my_os = platform.system()
 if my_os == "Windows":
     ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
-main_dir = os.getcwd()
-main_dir = re.sub(r"\\", "/", main_dir)
+main_dir = str(pathlib.Path(__file__).parent.absolute()).replace('\\', '/')
 
 main = Tk()
 ######################################
