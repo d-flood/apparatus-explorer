@@ -9,7 +9,7 @@ def make_graph(arcs, index, ref, nodes):
     else:
         for node in nodes:
             graph_data = f'\t{graph_data}{node.get("n")} [fillcolor="orange"]\n'
-    
+
     with open('files/template.dot', 'r', encoding='utf-8') as template_fn:
         template = template_fn.read()
         pass
@@ -20,12 +20,12 @@ def make_graph(arcs, index, ref, nodes):
     with open(f'files/dot/{filename}.dot', 'w', encoding='utf-8') as new_fn:
         new_fn.write(template)
         pass
-    
+
     call(f"dot -Tpng files/dot/{filename}.dot -o files/graphs/{filename}.png")
 
     return filename
 
-# This function appears to be unecessary because GraphViz output is consistent 
+# This function appears to be unecessary because GraphViz output is consistent
 # def resize_png(filename):
 #     from PIL import Image
 #     graph_image = Image.open(f'files/graphs/{filename}.png')

@@ -1,7 +1,10 @@
 import datetime
 import re
+
 from lxml import etree as ET
+
 from py_files.get_basetext import get_basetext
+
 
 def export_docx(tree, main_dir):
     try:
@@ -68,7 +71,7 @@ def export_docx(tree, main_dir):
             for x, y in zip(index[15:30], basetext[15:30]):
                 row_cells[cell].text = f"{x}\n{y}"
                 cell += 1
-            
+
             cell = 0
             row_cells = table.add_row().cells
             for x, y in zip(index[30:], basetext[30:]):
@@ -77,9 +80,11 @@ def export_docx(tree, main_dir):
 
         for app in apps:
             if app.get('from') == app.get('to'):
-                p = document.add_paragraph("\n"+app.get('from')).underline = True
+                p = document.add_paragraph(
+                    "\n"+app.get('from')).underline = True
             else:
-                p = document.add_paragraph("\n"+app.get('from')+"–"+app.get('to')).underline = True
+                p = document.add_paragraph(
+                    "\n"+app.get('from')+"–"+app.get('to')).underline = True
             rdgs = app.findall('rdg')
             for rdg in rdgs:
                 if rdg.text:

@@ -1,6 +1,6 @@
-from os import listdir
 import re
-from tkinter import *
+from os import listdir
+from tkinter import Button, Label, LabelFrame
 from tkinter import filedialog as fd
 from tkinter import messagebox as mb
 
@@ -38,20 +38,20 @@ class Combine:
 
         self.main_dir = main_dir
 
-        self.select_dir_button = Button(combo_tab, text='Select Folder', 
-                font=('Times', '12'), command=self.select_directory)
+        self.select_dir_button = Button(combo_tab, text='Select Folder',
+                                        font=('Times', '12'), command=self.select_directory)
         self.select_dir_button.grid(row=0, column=0, padx=50, pady=20)
 
         self.combine_button = Button(combo_tab, text='Combine Files',
-                font=('Times', '12'), command=self.combine_files)
+                                     font=('Times', '12'), command=self.combine_files)
         self.combine_button.grid(row=1, column=0, padx=50, pady=20)
 
         self.found_verses = LabelFrame(combo_tab, text='Verses to be combined:',
-                font=('Times', '12'))
+                                       font=('Times', '12'))
         self.found_verses.grid(row=0, column=1, columnspan=10, rowspan=2)
 
         self.help_button = Button(combo_tab, text='Help', font=('Times', '12'),
-                command=self.help_me)
+                                  command=self.help_me)
         self.help_button.grid(row=2, column=0, padx=50, pady=20)
 
         self.ready = False
@@ -79,7 +79,7 @@ Click "Help" for more info.')
                     row = 0
                 count += 1
                 verse_file = Label(self.found_verses, text=f,
-                    font=('Times', '12'), anchor='w', width=15)
+                                   font=('Times', '12'), anchor='w', width=15)
                 verse_file.grid(row=row, column=column, padx=5, pady=5)
                 row += 1
             else:
@@ -113,10 +113,10 @@ Click "Help" for more info.')
 {problems}\nFiles should be downloaded from the Collation Editor')
             else:
                 path_to_save = fd.asksaveasfilename(initialdir=f'{self.main_dir}/collations',
-                                defaultextension='.xml', filetypes=[("xml files", '*.xml')])
+                                                    defaultextension='.xml', filetypes=[("xml files", '*.xml')])
                 with open(path_to_save, 'w', encoding='utf-8') as full_doc:
                     full_doc.write(combined_files)
-    
+
     def help_me(self):
         mb.showinfo(title='Info', message=help_string)
         pass

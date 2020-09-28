@@ -3,15 +3,19 @@ import os
 import platform
 import re
 from distutils.spawn import find_executable
-from tkinter import *
-from tkinter import messagebox, ttk
+from tkinter import (DISABLED, END, LEFT, NORMAL, RIGHT, TOP, Button, Entry,
+                     Label, LabelFrame, PhotoImage, W)
 from tkinter import filedialog as fd
+from tkinter import messagebox, ttk
+
 from lxml import etree as ET
-from py_files.get_basetext import get_basetext, create_full_reference
+
 from py_files.export_docx import export_docx
-from py_files.make_graph import make_graph #, resize_png
-from py_files.itsee_to_open_cbgm.itsee_to_open_cbgm import reformat_xml
 from py_files.functions import router
+from py_files.get_basetext import create_full_reference, get_basetext
+from py_files.itsee_to_open_cbgm.itsee_to_open_cbgm import reformat_xml
+from py_files.make_graph import make_graph  # , resize_png
+
 
 class Layout:
 
@@ -24,8 +28,9 @@ class Layout:
         self.root = root
 
         # FRAMES
-        self.xml_dir_frame  = LabelFrame(main, text="")
-        self.xml_dir_frame.grid(row=8, column=0, columnspan=3, pady=10, padx=10)
+        self.xml_dir_frame = LabelFrame(main, text="")
+        self.xml_dir_frame.grid(
+            row=8, column=0, columnspan=3, pady=10, padx=10)
 
         self.ref_frame = LabelFrame(main, text="")
         self.ref_frame.grid(row=0, column=0, columnspan=3, pady=10, padx=10)
@@ -33,12 +38,15 @@ class Layout:
         self.index_frame = LabelFrame(main, text="")
         self.index_frame.grid(row=1, column=0, columnspan=3, pady=10, padx=10)
 
-        self.temp_frame = LabelFrame(self.index_frame) #packed after prev_index_btn
+        # packed after prev_index_btn
+        self.temp_frame = LabelFrame(self.index_frame)
 
         self.basetext_frame = LabelFrame(main, text="")
-        self.basetext_frame.grid(row=2, column=0, columnspan=3, pady=10, padx=10)
+        self.basetext_frame.grid(
+            row=2, column=0, columnspan=3, pady=10, padx=10)
 
-        self.rdgs_frame = LabelFrame(main, text=" Type\t    Readings", font=("Times", "12"))
+        self.rdgs_frame = LabelFrame(
+            main, text=" Type\t    Readings", font=("Times", "12"))
         self.rdgs_frame.grid(row=4, column=0, columnspan=3, pady=10, padx=10)
 
         self.rdgs_left_frame = LabelFrame(self.rdgs_frame, borderwidth=0)
@@ -50,77 +58,78 @@ class Layout:
         self.rdgs_type_frame = LabelFrame(self.rdgs_frame, borderwidth=0)
         self.rdgs_type_frame.pack(side=LEFT, padx=10)
 
-        self.gen_frame = LabelFrame(main, text="Genealogical Relationships", 
-                    font=("Times", "12"), bg=self.main_color)
+        self.gen_frame = LabelFrame(main, text="Local Stemma",
+                                    font=("Times", "12"), bg=self.main_color)
         self.gen_frame.grid(row=5, column=0, pady=10, padx=10)
 
         edit_arc_frame = LabelFrame(main, text="Edit Relationships",
-                        font=("Times", "12"))
+                                    font=("Times", "12"))
         edit_arc_frame.grid(row=5, column=1, padx=20, pady=20)
 
         edit_rdg_type = LabelFrame(main, text='Edit Reading Type',
-                        font=('Times', '12'))
+                                   font=('Times', '12'))
         edit_rdg_type.grid(row=5, column=2, padx=20, pady=20)
 
         # LABELS
         self.xml_dir_label = Label(self.xml_dir_frame, text="XML Collation File Path: ",
-                    font=("Times", "12"))
+                                   font=("Times", "12"))
         self.xml_dir_label.grid(row=0, column=0)
 
-        self.arc_label_1 = Label(edit_arc_frame, text="-->", font=("Times", "12"))
+        self.arc_label_1 = Label(
+            edit_arc_frame, text="-->", font=("Times", "12"))
         self.arc_label_1.grid(row=0, column=2, padx=10)
 
         # BUTTONS
 
-        self.load_xml_button = Button(self.xml_dir_frame, 
-            text="Load/Refresh XML File", 
-            font=("Times", "12"), 
-            command=self.load_xml)
+        self.load_xml_button = Button(self.xml_dir_frame,
+                                      text="Load/Refresh XML File",
+                                      font=("Times", "12"),
+                                      command=self.load_xml)
         self.load_xml_button.grid(row=0, column=3, padx=10)
 
         self.browse_button = Button(self.xml_dir_frame, text="Browse", font=("Times", "12"),
-                        command=self.browse)
+                                    command=self.browse)
         self.browse_button.grid(row=0, column=2, padx=10)
 
-        self.save_xml_btn = Button(self.xml_dir_frame, 
-            text="Save and Exit", 
-            font=("Times", "12"), 
-            command=self.save_exit)
+        self.save_xml_btn = Button(self.xml_dir_frame,
+                                   text="Save and Exit",
+                                   font=("Times", "12"),
+                                   command=self.save_exit)
         self.save_xml_btn.grid(row=0, column=4, padx=10)
 
         self.export_button = Button(self.xml_dir_frame, text="Export docx",
-                font=("Times", "12"), command=self.export_app_as_docx)
+                                    font=("Times", "12"), command=self.export_app_as_docx)
         self.export_button.grid(row=0, column=5, padx=10)
 
         self.prev_vrs_btn = Button(self.ref_frame, text="<Prev", font=("Times", "12"),
-                        command=self.prev_btn_cmd, state=DISABLED)
+                                   command=self.prev_btn_cmd, state=DISABLED)
         self.prev_vrs_btn.grid(row=0, column=0)
 
         self.next_vrs_btn = Button(self.ref_frame, text="Next>", font=("Times", "12"),
-                        command=self.next_btn_cmd, state=DISABLED)
+                                   command=self.next_btn_cmd, state=DISABLED)
         self.next_vrs_btn.grid(row=0, column=2)
 
         self.prev_index_button = Button(self.index_frame, text="<Prev", font=("Times", "12"),
-                            command=self.prev_index_cmd, state=DISABLED)
+                                        command=self.prev_index_cmd, state=DISABLED)
         self.prev_index_button.pack(side=LEFT, padx=10)
         self.temp_frame.pack(side=LEFT)
 
         self.next_index_button = Button(self.index_frame, text="Next>", font=("Times", "12"),
-                            command=self.next_index_cmd, state=DISABLED)
+                                        command=self.next_index_cmd, state=DISABLED)
         self.next_index_button.pack(side=RIGHT, padx=10)
 
         self.update_arc_button = Button(edit_arc_frame, text="Add", font=("Times", "12"),
-                            command=self.add_arc)
+                                        command=self.add_arc)
         self.update_arc_button.grid(row=0, column=4, padx=30, pady=30)
 
-        self.delete_arc_button = Button(edit_arc_frame, text="Delete", 
-                            font=("Times", "12"), command=self.delete_arc)
+        self.delete_arc_button = Button(edit_arc_frame, text="Delete",
+                                        font=("Times", "12"), command=self.delete_arc)
         self.delete_arc_button.grid(row=0, column=5, padx=30, pady=30)
 
-        self.add_rdg_type_button = Button(edit_rdg_type, text="Change", 
-                                    font=("Times", "12"), command=self.change_rdg) #packed after rdg combobox
-        self.delete_rdg_type_button = Button(edit_rdg_type, text="Delete", 
-                                        font=("Times", "12"), command=self.delete_rdg) #packed after rdg combobox
+        self.add_rdg_type_button = Button(edit_rdg_type, text="Change",
+                                          font=("Times", "12"), command=self.change_rdg)  # packed after rdg combobox
+        self.delete_rdg_type_button = Button(edit_rdg_type, text="Delete",
+                                             font=("Times", "12"), command=self.delete_rdg)  # packed after rdg combobox
 
         # ENTRY WIDGETS
         self.arc_entry_1 = Entry(edit_arc_frame, width=3, font=("Times", "12"))
@@ -130,7 +139,8 @@ class Layout:
         self.arc_entry_2.grid(row=0, column=3, padx=10)
         self.arc_entry_2.bind('<Return>', self.on_enter)
 
-        self.xml_dir_entry = Entry(self.xml_dir_frame, width=50, font=("Times", "12"))
+        self.xml_dir_entry = Entry(
+            self.xml_dir_frame, width=50, font=("Times", "12"))
         self.xml_dir_entry.grid(row=0, column=1)
 
         self.ref_entry = Entry(self.ref_frame, width=30, font=("Times", "12"))
@@ -139,7 +149,8 @@ class Layout:
         # other widgets
         self.rdg_combobox = ttk.Combobox(edit_rdg_type, width=3)
         self.rdg_combobox.pack(side=LEFT, padx=10, pady=20)
-        self.rdg_type_combobox = ttk.Combobox(edit_rdg_type, values=['orthographic', 'deficient', 'lac', 'om'])
+        self.rdg_type_combobox = ttk.Combobox(
+            edit_rdg_type, values=['orthographic', 'deficient', 'lac', 'om'])
         self.rdg_type_combobox.pack(side=LEFT, padx=10, pady=20)
         self.add_rdg_type_button.pack(side=LEFT, padx=10, pady=20)
         self.delete_rdg_type_button.pack(side=LEFT, padx=10, pady=20)
@@ -195,7 +206,7 @@ class Layout:
         # find and display all variation indexes
         if apps == []:
             app_label = Label(self.temp_frame, text="No Variation Units",
-                        font=("Times", "12"))
+                              font=("Times", "12"))
             app_label.pack(side=LEFT, padx=10)
         else:
             if self.app.get('from') == self.app.get('to'):
@@ -207,7 +218,8 @@ class Layout:
                     app_index = app_unit.get('from')
                 else:
                     app_index = f"{app_unit.get('from')} - {app_unit.get('to')}"
-                app_label = Label(self.temp_frame, text=app_index, font=("Times", "12"))
+                app_label = Label(
+                    self.temp_frame, text=app_index, font=("Times", "12"))
                 app_label.pack(side=LEFT, padx=15)
                 if app_index == index:
                     app_label.config(bg="spring green")
@@ -218,8 +230,11 @@ class Layout:
 
     def updater(self, change, direction):
         if change == 'initial startup':
-            current, self.app = router(change, direction, self.tree, self.ref_entry.get(), None)
-        else: current, self.app = router(change, direction, self.tree, self.ref_entry.get(), self.app)
+            current, self.app = router(
+                change, direction, self.tree, self.ref_entry.get(), None)
+        else:
+            current, self.app = router(
+                change, direction, self.tree, self.ref_entry.get(), self.app)
         self.update_index(current)
         self.disable_enable_buttons(current)
 
@@ -258,14 +273,14 @@ class Layout:
                     else:
                         rdg_type_text = f'{rdg.get("type")}\t'
                 else:
-                    rdg_type_text = 'none\t'    
+                    rdg_type_text = 'none\t'
                 if rdg.text:
                     greek_text = rdg.text
                 else:
                     greek_text = ''
                 rdg_label = Label(
-                    self.rdgs_left_frame, 
-                    text=f"{rdg_type_text}   {rdg.get('n')}   {greek_text}", 
+                    self.rdgs_left_frame,
+                    text=f"{rdg_type_text}   {rdg.get('n')}   {greek_text}",
                     font=("Times", "12"), wraplength=1000, padx=3)
                 rdg_label.pack(side=TOP, anchor=W)
                 rdg_wits = Label(
@@ -276,20 +291,19 @@ class Layout:
             arcs = self.app.findall('note/graph/arc')
             self.populate_relationships(arcs, index)
 
-
     def populate_relationships(self, arcs, index):
         for widget in self.gen_frame.winfo_children():
             widget.destroy()
         if self.does_dot_exist == None:
             if arcs == []:
                 arc_label = Label(self.gen_frame, text="No Arcs Present",
-                            font=("Times", "12"))
+                                  font=("Times", "12"))
                 arc_label.pack(side=TOP)
             else:
                 for arc in arcs:
                     arc_label = Label(
-                        self.gen_frame, 
-                        text=f"{arc.get('from')} --> {arc.get('to')}", 
+                        self.gen_frame,
+                        text=f"{arc.get('from')} --> {arc.get('to')}",
                         font=("Times", "12"))
                     arc_label.pack(side=TOP)
         else:
@@ -301,7 +315,7 @@ class Layout:
             filename = f'{filename}.png'
             graph_image = PhotoImage(file=f'files/graphs/{filename}')
             arc_label = Label(
-                self.gen_frame, image=graph_image, 
+                self.gen_frame, image=graph_image,
                 height=350, width=400, bg=self.main_color)
             arc_label.image = graph_image
             arc_label.pack()
@@ -309,12 +323,12 @@ class Layout:
     def load_xml(self):
         cx_fname = self.xml_dir_entry.get()
         if cx_fname == "":
-            messagebox.showinfo(title="Uh-oh", 
-            message="File path field is blank. Type in the file path\
+            messagebox.showinfo(title="Uh-oh",
+                                message="File path field is blank. Type in the file path\
 (location) or click 'Browse'")
         elif '.xml' not in cx_fname:
-            messagebox.showwarning(title='Uh-oh', 
-            message="Input must be an XML (.xml) output file from the ITSEE Collation Editor")
+            messagebox.showwarning(title='Uh-oh',
+                                   message="Input must be an XML (.xml) output file from the ITSEE Collation Editor")
         else:
             with open(cx_fname, 'r', encoding='utf-8') as file:
                 self.tree = file.read()
@@ -333,8 +347,10 @@ included utility created by Joey McCollum')
                     return None
             else:
                 self.tree = re.sub("xml:id", "verse", self.tree)
-                self.tree = re.sub("<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">", "<TEI>", self.tree)
-                self.tree = re.sub("<?xml version='1.0' encoding='UTF-8'?>", "", self.tree)
+                self.tree = re.sub(
+                    "<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">", "<TEI>", self.tree)
+                self.tree = re.sub(
+                    "<?xml version='1.0' encoding='UTF-8'?>", "", self.tree)
                 with open(cx_fname, 'w', encoding='utf-8') as file:
                     file.write(self.tree)
                 parser = ET.XMLParser(remove_blank_text=True)
@@ -380,27 +396,28 @@ included utility created by Joey McCollum')
             widget.destroy()
         for ind, word, in zip(index, basetext):
             index_label = Label(self.basetext_frame, text=ind+"\n"+word,
-                            font=("Times", "12"))
+                                font=("Times", "12"))
             index_label.pack(side=LEFT, padx=5)
             if ind in index_list:
                 index_label.config(bg="spring green")
 
     def write_new_xml(self):
-        self.tree.write(self.xml_dir_entry.get(), encoding="utf-8", pretty_print=True)
+        self.tree.write(self.xml_dir_entry.get(),
+                        encoding="utf-8", pretty_print=True)
         with open(self.xml_dir_entry.get(), 'r', encoding='utf-8') as file:
             new_file = file.read()
         new_file = re.sub("verse", "xml:id", new_file)
         new_file = re.sub(
-            "<TEI>", 
-            "<?xml version='1.0' encoding='UTF-8'?>\n<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">", 
+            "<TEI>",
+            "<?xml version='1.0' encoding='UTF-8'?>\n<TEI xmlns=\"http://www.tei-c.org/ns/1.0\">",
             new_file)
         with open(self.xml_dir_entry.get(), 'w', encoding='utf-8') as file:
             file.write(new_file)
 
     def add_arc(self):
         if self.arc_entry_1.get() == "" or self.arc_entry_2.get() == "":
-            messagebox.showinfo(title="Uh-oh", 
-            message="Remember to fill both boxes in the 'Edit Relationships' section")
+            messagebox.showinfo(title="Uh-oh",
+                                message="Remember to fill both boxes in the 'Edit Relationships' section")
         else:
             arc = ET.Element("arc")
             arc.set('from', self.arc_entry_1.get())
@@ -409,11 +426,11 @@ included utility created by Joey McCollum')
             arc_parent.append(arc)
             self.updater('arc update', 'None')
             self.write_new_xml()
-        
+
     def delete_arc(self):
         if self.arc_entry_1.get() == "" or self.arc_entry_2.get() == "":
-            messagebox.showinfo(title="Uh-oh", 
-            message="Remember to fill both boxes in the 'Edit Relationships' section")
+            messagebox.showinfo(title="Uh-oh",
+                                message="Remember to fill both boxes in the 'Edit Relationships' section")
         else:
             arcs = self.app.findall('note/graph/arc')
             for arc in arcs:
@@ -438,6 +455,6 @@ included utility created by Joey McCollum')
         rdg = self.app.find(f".//rdg[@n='{rdg_n}']")
         rdg.attrib.pop('type', None)
         self.updater('arc update', 'None')
-    
+
     def on_enter(self, event):
-        self.add_arc()  
+        self.add_arc()

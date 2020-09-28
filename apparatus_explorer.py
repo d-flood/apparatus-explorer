@@ -3,17 +3,17 @@ import os
 import platform
 import re
 from distutils.spawn import find_executable
-from tkinter import *
-from tkinter import messagebox, ttk
-from tkinter import filedialog as fd
+from tkinter import Tk, ttk
+
 from lxml import etree as ET
-from py_files.get_basetext import get_basetext, create_full_reference
+
+from py_files.combine_files import Combine
 from py_files.export_docx import export_docx
-from py_files.make_graph import make_graph
+from py_files.functions import check_make_temp_dirs
+from py_files.get_basetext import create_full_reference, get_basetext
 from py_files.itsee_to_open_cbgm.itsee_to_open_cbgm import reformat_xml
 from py_files.layout import Layout
-from py_files.functions import check_make_temp_dirs
-from py_files.combine_files import Combine
+from py_files.make_graph import make_graph
 
 my_os = platform.system()
 if my_os == "Windows":
