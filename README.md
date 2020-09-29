@@ -70,7 +70,7 @@ The python-docx library can take a docx file and use its styling as a template. 
 I have included an example collation file, an example basetext file, and a suitable docx template file. 
 
 To test the tool using these examples, download or clone this repository.
-- For the Windows standalone version, see [Apparatus Explorer](https://github.com/d-flood/apparatus-explorer_exe).
+- For the Windows standalone version, see [Apparatus Explorer](https://github.com/d-flood/apparatus-explorer-standalone).
 - Any platform with Python 3.6+ installed: execute `apparatus_explorer.py`
 1. Click 'Browse' and navigate to `Apparatus Explorer/collations` and open `R13.xml`. This will load a collation of Romans 13:5-14 that I edited.
     - The data for 01, 02, 03, and 33 are from the INTF NT.VMR TEI XML transcriptions (https://ntvmr.uni-muenster.de/manuscript-workspace). The data for 018, 0150, 0151, 1506, and 2110 are the result of my research. The rest of the data was taken from Reuben J. Swanson, _New Testament Greek Manuscripts: Variant Readings Arranged in Horizontal Lines against Codex Vaticanus: Romans_ (2001).
