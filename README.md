@@ -10,7 +10,7 @@ The Apparatus Explorer is primarily for conveniently viewing a digital apparatus
 The CBGM can only be fully utilized if the direction of relationship between each reading in a variation unit is encoded. This is what the Apparatus Explorer was made to help. It was (and is) developed during my PhD studies to help with my broader project in New Testament Textual Criticism.
 
 This is a companion tool to [Tendon](https://github.com/d-flood/tendon/), which was designed for simplifying the process of transcription to collation, while the Apparatus Explorer is for editing the collation output.
-
+![](images/appex_example.gif)
 # Tutorial
 ## Installing
 ### Dependencies
