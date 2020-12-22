@@ -1,4 +1,5 @@
-from subprocess import call
+from subprocess import call, CREATE_NO_WINDOW
+
 
 from PIL import Image, ImageOps
 
@@ -65,7 +66,7 @@ def make_graph(arcs: list, selected_app: str, ref: str, nodes: list, main_dir, b
     with open('.temp_graph.dot', 'w', encoding='utf-8') as file:
         file.write(template)
 
-    call(f"dot -Tpng .temp_graph.dot -o .temp_graph.png")
+    call(f"dot -Tpng .temp_graph.dot -o .temp_graph.png", creationflags=CREATE_NO_WINDOW)
 
     fix_size('.temp_graph.png')
     

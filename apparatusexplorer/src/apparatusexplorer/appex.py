@@ -100,18 +100,18 @@ def initial_units_row():
         row.append(sg.Text('', visible=False, key=f'unit{i}', justification='center', font='Cambria 14'))
     return row
 
-def initial_basetext_row(): # working
+def initial_basetext_row(settings): # working
     # sg.theme('DarkTeal1')
     row = []
     for i in range(50):
-        row.append(sg.Text('', visible=False, key=f'bt{i}', justification='center', font=f'{settings["greek_font"]} 12'))
+        row.append(sg.Text('', visible=False, key=f'bt{i}', justification='center', font=f'{settings["greek_font"]}'))
     return row
 
-def update_basetext(basetext, window, selected_app):
+def update_basetext(basetext, window, selected_app, greek_font):
     index = 2
     words = basetext.split()
     for i, word in zip(range(len(words)), words):
-        window[f'bt{i}'].update(value=f'{word}\n{index}', visible=True, background_color=determine_focus(index, selected_app))
+        window[f'bt{i}'].update(value=f'{word}\n{index}', visible=True, background_color=determine_focus(index, selected_app), font=greek_font)
         index += 2
     for n in range(i+1, 50):
         window[f'bt{n}'].update(visible=False)
@@ -143,8 +143,8 @@ def format_rdgs(rdgs):
         # to_return.append('_'*40)
     return '\n'.join(to_return)
 
-def update_rdgs(rdgs, window):
-    window['-rdgs-'].update(value=format_rdgs(rdgs))
+def update_rdgs(rdgs, window, greek_text):
+    window['-rdgs-'].update(value=format_rdgs(rdgs), font=greek_text)
 
 def update_arcs_text(window, arcs):
     to_display = []
@@ -206,11 +206,11 @@ def delete_arc_main(values, arcs, app, selected_app, ref, nodes, main_dir):
     pg.make_graph(arcs, selected_app, ref, nodes, main_dir, graph_bg_color, graph_text_color, line_color, orientation)
     return arcs, app
 
-def refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes):
+def refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font):
     update_ref(window, ref)
-    update_basetext(basetext, window, selected_app)
+    update_basetext(basetext, window, selected_app, greek_font)
     update_units_row(all_apps, window, selected_app)
-    update_rdgs(rdgs, window)
+    update_rdgs(rdgs, window, greek_font)
     update_available_names(rdgs, window)
     update_arcs(window, arcs, dot_exists, ref, selected_app, main_dir, nodes)
 
@@ -232,7 +232,8 @@ def is_xml_reformatted(xml_fn):
 #########################################################################
 def main():
     settings = get_settings(main_dir)
-    basetext_row = initial_basetext_row()
+    greek_font = settings['greek_font']
+    basetext_row = initial_basetext_row(settings)
     units_row = initial_units_row()
     menu = [['File', ['!Save As', '---', 'Settings', 'About']]]
 
@@ -287,7 +288,7 @@ def main():
         [sg.Menu(menu, key='-menu-')],
         [sg.Text('XML TEI Apparatus Explorer and Editor', justification='center')],
         [sg.Column(upper_column, element_justification='center')],
-        [sg.MultilineOutput('', size=(200, 8), font=f'{settings["greek_font"]} 12', key='-rdgs-')],
+        [sg.MultilineOutput('', size=(200, 8), font=f'{settings["greek_font"]}', key='-rdgs-')],
         [sg.Column(edit_column)],
         [sg.Frame('', xml_input_frame)]
     ]
@@ -319,7 +320,7 @@ def main():
                     window['-xml_input-'].update(value=xml_file)
                 # try:
                 tree, root, ab, ref, basetext, all_apps, selected_app, rdgs, arcs, nodes, app = xp.initialize_apparatus(xml_file)
-                refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
+                refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
                 set_buttons(window, app, ab)
                 enable_editing_buttons(window)
                 initial_fn = values['-xml_input-']
@@ -331,27 +332,27 @@ def main():
 
         elif event == '-update_verse-':
             ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.load_new_verse(root, values['-verse-'])
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
             set_buttons(window, app, ab)
 
         elif event == '-next_verse-':
             ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.verse_from_ab(ab.getnext())
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
             set_buttons(window, app, ab)
 
         elif event == '-prev_verse-':
             ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.verse_from_ab(ab.getprevious())
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
             set_buttons(window, app, ab)
 
         elif event == '-next_app-':
             selected_app, rdgs, arcs, nodes, app = xp.load_app(app, 'next')
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
             set_buttons(window, app, ab)
 
         elif event == '-prev_app-':
             selected_app, rdgs, arcs, nodes, app = xp.load_app(app, 'prev')
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
             set_buttons(window, app, ab)
 
         elif event == '-save_xml-':
@@ -362,15 +363,15 @@ To save a copy, select "Save As" from the File menu.', 'Save Collation')
 
         elif event == '-update_reading-':
             app, rdgs = xp.update_reading_type(app, values['-edit_type-'], values['-edit_rdg-'])
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
 
         elif event == '-add_arc-':
             arcs, app = add_arc_main(arcs, values, app, selected_app, ref, nodes, main_dir)
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
 
         elif event == '-delete_arc-':
             arcs, app = delete_arc_main(values, arcs, app, selected_app, ref, nodes, main_dir)
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
 
         elif event == '-graph-':
             open_graph()

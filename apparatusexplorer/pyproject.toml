@@ -12,8 +12,8 @@ formal_name = "Apparatus Explorer"
 description = "Visualize, edit, and export TEI XML critical apparatuses to docx"
 icon = "src/apparatusexplorer/resources/apparatusexplorer"
 sources = ['src/apparatusexplorer']
-requires = ['Pillow==8.0.1',
-            # 'PySide2',
+requires = ['Pillow',
+            'PySide2',
             'lxml']
 
 
