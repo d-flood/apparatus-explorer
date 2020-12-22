@@ -1,8 +1,0 @@
-digraph G {
-	graph [bgcolor="#f4f4f4", size="2.5"]
-	node [shape=plaintext, fontname="helvetica"]
-	// rankdir="LR"
-    graph [dpi=140]
-	
-zzz
-}

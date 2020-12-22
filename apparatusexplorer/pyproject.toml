@@ -1,0 +1,35 @@
+[tool.briefcase]
+project_name = "Apparatus Explorer"
+bundle = "com.davidfloodii.apparatusexplorer"
+version = "0.8"
+url = "https://github.com/d-flood/apparatus-explorer"
+license = "MIT license"
+author = 'David Flood, II'
+author_email = "davidfloodii@gmail.com"
+
+[tool.briefcase.app.apparatusexplorer]
+formal_name = "Apparatus Explorer"
+description = "Visualize, edit, and export TEI XML critical apparatuses to docx"
+icon = "src/apparatusexplorer/resources/apparatusexplorer"
+sources = ['src/apparatusexplorer']
+requires = ['Pillow==8.0.1',
+            # 'PySide2',
+            'lxml']
+
+
+[tool.briefcase.app.apparatusexplorer.macOS]
+requires = []
+
+[tool.briefcase.app.apparatusexplorer.linux]
+requires = []
+system_requires = []
+
+[tool.briefcase.app.apparatusexplorer.windows]
+requires = []
+
+# Mobile deployments
+[tool.briefcase.app.apparatusexplorer.iOS]
+requires = []
+
+[tool.briefcase.app.apparatusexplorer.android]
+requires = []

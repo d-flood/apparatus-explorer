@@ -1,0 +1,9 @@
+digraph G {
+	graph [bgcolor="_bg_color_"] //change bgcolor value to something to be replaced with a variable
+	node [shape=plaintext, fontname="helvetica", fontcolor="_font_color_"] //#CCB8A7
+	_orientation_
+    graph [dpi=200]
+	
+zzz
+
+}

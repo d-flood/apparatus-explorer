@@ -1,0 +1,10 @@
+Metadata-Version: 2.1
+Briefcase-Version: 0.3.3
+Name: apparatusexplorer
+Formal-Name: Apparatus Explorer
+App-ID: com.davidfloodii.apparatusexplorer.apparatusexplorer
+Version: 0.8
+Home-page: https://github.com/d-flood/apparatus-explorer
+Author: David Flood, II
+Author-email: davidfloodii@gmail.com
+Summary: Visualize, edit, and export TEI XML critical apparatuses to docx
