@@ -86,6 +86,7 @@ def save_xml(tree, fn):
     to_save = to_save.replace('verse=', 'xml:id=')
     with open(fn, 'w', encoding='utf-8') as file:
         file.write(to_save)
+    return fn
 
 ##########################################################################
 '''Complex Functions'''
@@ -144,18 +145,29 @@ def load_app(app, direction: str):
 '''Editing XML File'''
 ####################################################
 def update_reading_type(app, new_attrib: str, name: str):
-    if new_attrib == 'Deficient':
-        new_attrib = 'defi'
+    if new_attrib == 'Defective':
+        new_attrib = 'def'
     elif new_attrib == 'Orthographic':
         new_attrib = 'orth'
     elif new_attrib == 'Omit':
         new_attrib = 'om'
     elif new_attrib == 'Lacunose':
         new_attrib = 'lac'
+    elif new_attrib == 'Subreading':
+        new_attrib = 'subr'
     rdg = app.find(f'rdg[@n="{name}"]')
     rdg.attrib['type'] = new_attrib
     rdgs = get_all_rdgs(app)
     return app, rdgs
+
+def delete_rdg(app, rdg_n):
+    rdgs = app.findall('rdg')
+    for rdg in rdgs:
+        if rdg.attrib['n'] == rdg_n:
+            rdg.attrib.pop('type')
+            break
+    all_rdgs = get_all_rdgs(app)
+    return app, all_rdgs
 
 def add_arc(app, arc_from: str, arc_to: str):
     all_arcs, _ = get_arcs(app)

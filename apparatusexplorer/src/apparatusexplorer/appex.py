@@ -83,6 +83,7 @@ def enable_editing_buttons(window):
     window['-update_verse-'].update(disabled=False)
     window['-save_xml-'].update(disabled=False)
     window['-menu-'].update(menu_definition=menu)
+    window['-delete_reading-'].update(disabled=False)
 
 def update_ref(window, ref):
     window['-verse-'].update(value=ref)
@@ -97,14 +98,14 @@ def initial_units_row():
     # sg.theme('DarkTeal1')
     row = []
     for i in range(20):
-        row.append(sg.Text('', visible=False, key=f'unit{i}', justification='center', font='Cambria 14'))
+        row.append(sg.Text('', visible=False, key=f'unit{i}', justification='center', font='Cambria 12'))
     return row
 
 def initial_basetext_row(settings): # working
     # sg.theme('DarkTeal1')
     row = []
     for i in range(50):
-        row.append(sg.Text('', visible=False, key=f'bt{i}', justification='center', font=f'{settings["greek_font"]}'))
+        row.append(sg.Text('', visible=False, key=f'bt{i}', justification='center', pad=(5, 5), font=f'{settings["greek_font"]}'))
     return row
 
 def update_basetext(basetext, window, selected_app, greek_font):
@@ -139,7 +140,9 @@ def format_rdgs(rdgs):
             text = ''
         else:
             text = rdg['text']
-        to_return.append(f'{rdg["name"]}\t{rdg["type"]}\t\t] {text}\t{rdg["wits"].replace(" ", ", "):<150}')
+        if rdg['type'] is None:
+            rdg['type'] = '    '
+        to_return.append(f'{rdg["name"]}\t{rdg["type"]}\t\t] {text:<75}{rdg["wits"].replace(" ", ", "):<100}')
         # to_return.append('_'*40)
     return '\n'.join(to_return)
 
@@ -226,6 +229,10 @@ def is_xml_reformatted(xml_fn):
     else:
         return True
 
+def save_settings(settings, main_dir):
+    with open(f'{main_dir}/resources/settings.json', 'w') as file:
+        json.dump(settings, file, indent=4)
+
 #########################################################################
 #########################################################################
 """Layout and Main Loop"""
@@ -252,8 +259,9 @@ def main():
 
     edit_readings_frame = [
         [sg.Text('Reading:', size=(20, 2)), sg.Combo([' ', ' '], size=(10, 2), readonly=True, key='-edit_rdg-')],
-        [sg.Text('Type:', size=(20, 2)), sg.Combo(['Deficient', 'Orthographic', 'Error', 'Lacunose'], size=(20, 2), readonly=True, key='-edit_type-')],
-        [sg.Button('Update', key='-update_reading-', size_px=(170, 60), disabled=True)]
+        [sg.Text('Type:', size=(20, 2)), sg.Combo(['Defective', 'Orthographic', 'Lacunose', 'Subreading'], size=(20, 2), readonly=True, key='-edit_type-')],
+        [sg.Button('Update', key='-update_reading-', disabled=True)],
+        [sg.Button('Delete', key='-delete_reading-', disabled=True)]
     ]
 
     edit_stemma_frame = [
@@ -301,14 +309,8 @@ def main():
 
     while True:
         event, values = window.read()
-
+        
         if event in [sg.WINDOW_CLOSED, None]:
-            try:
-                settings['last_opened'] = xml_file
-                with open(f'{main_dir}/resources/settings.json', 'w') as file:
-                    json.dump(settings, file, indent=4)
-            except UnboundLocalError:
-                pass
             break
 
         elif event == 'Load File':
@@ -360,9 +362,15 @@ def main():
 To save a copy, select "Save As" from the File menu.', 'Save Collation')
             if response == 'Okay':
                 xp.save_xml(tree, initial_fn)
+                settings['last_opened'] = initial_fn
+                save_settings(settings, main_dir)
 
         elif event == '-update_reading-':
             app, rdgs = xp.update_reading_type(app, values['-edit_type-'], values['-edit_rdg-'])
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+
+        elif event == '-delete_reading-':
+            app, rdgs = xp.delete_rdg(app, values['-edit_rdg-'])
             refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
 
         elif event == '-add_arc-':
@@ -379,14 +387,17 @@ To save a copy, select "Save As" from the File menu.', 'Save Collation')
         elif event == 'Save As':
             new_fn = sg.popup_get_file('', no_window=True, file_types=(("XML Files", "*.xml"),), save_as=True)
             if new_fn:
-                xp.save_xml(tree, new_fn)
-                okay_popup(f'Saved to\n{new_fn}', 'Saved!')
+                fn = xp.save_xml(tree, new_fn)
+                settings['last_opened'] = fn
+                save_settings(settings, main_dir)
+                okay_popup(f'Saved to\n{fn}', 'Saved!')
+                
 
         elif event == 'Settings':
             settings = set_settings(settings, main_dir, icon)
 
         elif event == 'About':
-            readme_popup(main_dir, icon)            
+            readme_popup(main_dir, icon)        
 
         # print(event, values)
     
