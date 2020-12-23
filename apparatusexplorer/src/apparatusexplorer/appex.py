@@ -424,7 +424,7 @@ def get_settings(main_dir):
         settings = {
             'graph_orientation': 'rankdir="LR"',
             'theme': 'Parchment',
-            'greek_font': 'Times',
+            'greek_font': 'Cambria 12',
             'dpi': True,
             'last_opened': '',
             'graph_bg_color': '#ffffff00'
