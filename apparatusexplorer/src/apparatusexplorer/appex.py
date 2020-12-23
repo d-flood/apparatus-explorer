@@ -66,8 +66,11 @@ def set_buttons(window, app, ab):
     else:
         window['-next_verse-'].update(disabled=False)
     ##### APP BUTTONS
-    if app.getnext() is None or app.getnext().getnext() is None:
+    next_app = app.getnext()
+    if next_app is None or (next_app.tag == 'seg' and next_app.getnext() is None):
         window['-next_app-'].update(disabled=True)
+    elif next_app.tag == 'app':
+        window['-next_app-'].update(disabled=False)
     else:
         window['-next_app-'].update(disabled=False)
     if app.getprevious() is None or app.getprevious().getprevious() is None:
