@@ -323,15 +323,15 @@ def main():
                     sg.popup_quick_message('Reformatting XML file...')
                     xml_file = reformat_xml(xml_file)
                     window['-xml_input-'].update(value=xml_file)
-                # try:
-                tree, root, ab, ref, basetext, all_apps, selected_app, rdgs, arcs, nodes, app = xp.initialize_apparatus(xml_file)
-                refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
-                set_buttons(window, app, ab)
-                enable_editing_buttons(window)
-                initial_fn = values['-xml_input-']
-#                 except:
-#                     okay_popup('Failed to load XML file.\n\
-# XML file must be the output of the ITSEE and INTF Collation Editor.', 'Failed to Parse XML')
+                try:
+                    tree, root, ab, ref, basetext, all_apps, selected_app, rdgs, arcs, nodes, app = xp.initialize_apparatus(xml_file)
+                    refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+                    set_buttons(window, app, ab)
+                    enable_editing_buttons(window)
+                    initial_fn = values['-xml_input-']
+                except:
+                    okay_popup('Failed to load XML file.\n\
+XML file must be the output of the ITSEE and INTF Collation Editor.', 'Failed to Parse XML')
             else:
                 sg.popup_quick_message('Select a valid XML TEI encoded apparatus.')
 
