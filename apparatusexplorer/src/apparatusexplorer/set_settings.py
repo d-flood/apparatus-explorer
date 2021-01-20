@@ -19,7 +19,14 @@ def make_layout(settings):
                 sg.Radio('Transparent', '-graph_bg_color-', default=transparent, key='-graph_transparent-'), 
                 sg.Radio('White', '-graph_bg_color-', default=white, key='-graph_white-')],
     ]
+    ignore_lac_hint = 'Hide variation units for which the only information\n\
+is that one or more witnesses is lacunose.'
+    ignore_subr_hint = '''Hide variation units when the only difference between two readings
+is that one of the readings has been marked as a "subreading."
+This is usually for meaningless spelling differences or scribal errors.'''
     app_settings_frame = [
+        [sg.Checkbox('Ignore Lacunose Units', tooltip=ignore_lac_hint, key='ignore_lac', default=settings['ignore']['lac']),
+            sg.Checkbox('Ignore Subreadings', tooltip=ignore_subr_hint, key='ignore_subr', default=settings['ignore']['lac'])],
         [sg.Text('Color Theme:'), sg.Stretch(), 
             sg.Drop(['Grey', 'Dark Mode', 'Parchment', 'System Default'],
                       default_value=settings['theme'], key='-theme-', readonly=True)],
@@ -46,6 +53,8 @@ def save_settings(main_dir, settings, values):
         settings['dpi'] = bool(values['-dpi-'])
     else:
         settings['dpi'] = int(values['-dpi-'])
+    settings['ignore']['lac'] = values['ignore_lac']
+    settings['ignore']['subr'] = values['ignore_subr']
 
     with open(f'{main_dir}/resources/settings.json', 'w') as file:
         json.dump(settings, file, indent=4)

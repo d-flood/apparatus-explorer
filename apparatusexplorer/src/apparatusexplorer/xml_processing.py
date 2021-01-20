@@ -27,10 +27,20 @@ def construct_basetext(ab):
             basetext.append(elem.find('lem').text)
     return ' '.join(basetext)
 
-def get_all_apps(ab):
+def get_all_apps(ab, ignore: dict):
     apps = ab.findall('app')
+    if apps is None:
+        return None
     app_units = []
     for app in apps:
+        if ignore['lac'] is True:
+            rdgs = app.findall('rdg')
+            if len(rdgs) == 2 and rdgs[1].get('type') == 'lac':
+                continue
+        if ignore['subr'] is True:
+            rdgs = app.findall('rdg')
+            if len(rdgs) == 2 and rdgs[1].get('type') == 'subreading':
+                continue
         if app.get('from') == app.get('to'):
             app_units.append(int(app.get('from')))
         else:
@@ -38,12 +48,16 @@ def get_all_apps(ab):
     return app_units
 
 def get_focus_app(app):
+    if app is None:
+        return None
     if app.get('from') == app.get('to'):
         return int(app.get('from'))
     else:
         return (int(app.get("from")), (int(app.get("to"))))
 
 def get_all_rdgs(app):
+    if app is None:
+        return None
     readings = []
     rdgs = app.findall('rdg')
     for rdg in rdgs:
@@ -61,6 +75,8 @@ def get_all_rdgs(app):
     return readings
 
 def get_arcs(app):
+    if app is None:
+        return None, None
     graph = app.find('note/graph')
     arcs = []
     all_arcs = graph.findall('arc')
@@ -92,33 +108,33 @@ def save_xml(tree, fn):
 '''Complex Functions'''
 ##########################################################################
 # This gets the xml file finds the first app of the first verse
-def initialize_apparatus(fn):
+def initialize_apparatus(fn, ignore):
     root, tree = get_xml_file(fn)
     ab = root.find('ab')
     ref = ab.get('verse').replace('-APP', '')
     basetext = construct_basetext(ab)
-    all_apps = get_all_apps(ab)
+    all_apps = get_all_apps(ab, ignore)
     app = ab.find('app')
     selected_app = get_focus_app(app)
     rdgs = get_all_rdgs(app)
     arcs, nodes = get_arcs(app)
     return tree, root, ab, ref, basetext, all_apps, selected_app, rdgs, arcs, nodes, app
 
-def load_new_verse(root, verse):
+def load_new_verse(root, verse, ignore):
     ab = select_verse(root, verse)
     ref = ab.get('verse').replace('-APP', '')
     basetext = construct_basetext(ab)
-    all_apps = get_all_apps(ab)
+    all_apps = get_all_apps(ab, ignore)
     app = ab.find('app')
     selected_app = get_focus_app(app)
     rdgs = get_all_rdgs(app)
     arcs, nodes = get_arcs(app)
     return ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab
 
-def verse_from_ab(ab):
+def verse_from_ab(ab, ignore):
     ref = ab.get('verse').replace('-APP', '')
     basetext = construct_basetext(ab)
-    all_apps = get_all_apps(ab)
+    all_apps = get_all_apps(ab, ignore)
     app = ab.find('app')
     selected_app = get_focus_app(app)
     rdgs = get_all_rdgs(app)

@@ -5,6 +5,7 @@ import pathlib
 import re
 import subprocess
 
+from apparatusexplorer.combine_xml import combine_xml_files_interface
 from apparatusexplorer.itsee_to_open_cbgm.itsee_to_open_cbgm import reformat_xml
 import apparatusexplorer.process_graph as pg
 from apparatusexplorer.set_settings import set_settings
@@ -65,6 +66,10 @@ def set_buttons(window, app, ab):
     else:
         window['-next_verse-'].update(disabled=False)
     ##### APP BUTTONS
+    if app is None:
+        window['-next_app-'].update(disabled=True)
+        window['-prev_app-'].update(disabled=True)
+        return
     next_app = app.getnext()
     if next_app is None or (next_app.tag == 'seg' and next_app.getnext() is None):
         window['-next_app-'].update(disabled=True)
@@ -78,7 +83,7 @@ def set_buttons(window, app, ab):
         window['-prev_app-'].update(disabled=False)
 
 def enable_editing_buttons(window):
-    menu = [['File', ['Save As', '---', 'Settings', 'About']]]
+    menu = [['File', ['Save As', '---', 'Combine XML Files', '---', 'Settings', 'About']]]
     window['-update_reading-'].update(disabled=False)
     window['-add_arc-'].update(disabled=False)
     window['-delete_arc-'].update(disabled=False)
@@ -107,19 +112,22 @@ def update_basetext(basetext, window, selected_app):
         window[f'bt{n}'].update(visible=False)
 
 def determine_focus(unit, focus):
+    if focus is None:
+        return sg.DEFAULT_BACKGROUND_COLOR
     if unit in prepare_focus(focus) or unit == focus:
         return selected_app_color
     else:
         return sg.DEFAULT_BACKGROUND_COLOR
 
 def update_units_row(units: list, window, focus):
-    i = None
-    for i, unit in zip(range(len(units)), units):
-        unit_str = str(unit).replace('(', '')
-        unit_str = unit_str.replace(')', '')
-        unit_str = unit_str.replace(', ', '–')
-        unit_str = unit_str.replace('\'', '')
-        window[f'unit{i}'].update(value=f'{unit_str}', visible=True, background_color=determine_focus(unit, focus))
+    i = -1
+    if focus is not None:
+        for i, unit in zip(range(len(units)), units):
+            unit_str = str(unit).replace('(', '')
+            unit_str = unit_str.replace(')', '')
+            unit_str = unit_str.replace(', ', '–')
+            unit_str = unit_str.replace('\'', '')
+            window[f'unit{i}'].update(value=f'{unit_str}', visible=True, background_color=determine_focus(unit, focus))
     for n in range(i+1, 20):
         window[f'unit{n}'].update(visible=False)
 
@@ -137,7 +145,10 @@ def format_rdgs(rdgs):
     return '\n'.join(to_return)
 
 def update_rdgs(rdgs, window):
-    window['-rdgs-'].update(value=format_rdgs(rdgs))
+    if rdgs is None:
+        window['-rdgs-'].update(value='')
+    else:
+        window['-rdgs-'].update(value=format_rdgs(rdgs))
 
 def update_arcs_text(window, arcs):
     to_display = []
@@ -152,25 +163,31 @@ def update_arcs_graph(window, main_dir, ref, selected_app, arcs, nodes):
     # graph_fn = f'{ref}U{selected_app}.png' this is for unique files names. Using a temp file instead
     # graph_path = pathlib.Path(f'{output_dir}/graphs/{graph_fn}')
     graph_path = '.temp_graph.png'
+    blank_graph = f'{main_dir}/resources/blank_graph.png'
     # It would be better not to generate a new graph every click,
     # but this leads to the png not matching the current xml element.
     # Perhaps if the png can be tied to a document.
     # if graph_path.exists():
     #     window['-graph-'].update(filename=graph_path.as_posix())
     # else:
-    pg.make_graph(arcs, selected_app, ref, nodes, main_dir, graph_bg_color, graph_text_color, line_color, orientation)
-    window['-graph-'].update(filename=graph_path)
-
+    if selected_app is not None:
+        pg.make_graph(arcs, selected_app, ref, nodes, main_dir, graph_bg_color, graph_text_color, line_color, orientation)
+        window['-graph-'].update(filename=graph_path)
+    else:
+        window['-graph-'].update(filename=blank_graph)
 
 def update_arcs(window, arcs, dot_exists, ref, selected_app, main_dir, nodes):
+    if selected_app is None:
+        return
     if dot_exists:
         update_arcs_graph(window, main_dir, ref, selected_app, arcs, nodes)
     else:
         update_arcs_text(window, arcs)
     
 def update_available_names(rdgs, window):
-    names = []
-    [names.append(rdg['name']) for rdg in rdgs]
+    names = ['']
+    if rdgs is not None:
+        [names.append(rdg['name']) for rdg in rdgs]
     window['-stemma_from-'].update(values=names)
     window['-stemma_to-'].update(values=names)
     window['-edit_rdg-'].update(values=names)
@@ -182,6 +199,8 @@ def is_different(value_a, value_b):
     return False 
 
 def add_arc_main(arcs, values: dict, app, selected_app, ref, nodes, main_dir):
+    if selected_app is None:
+        return arcs, app
     if is_different(values['-stemma_from-'], values['-stemma_to-']) is False:
         return arcs, app
     new_arcs, app = xp.add_arc(app, values['-stemma_from-'], values['-stemma_to-'])
@@ -193,6 +212,8 @@ def add_arc_main(arcs, values: dict, app, selected_app, ref, nodes, main_dir):
     return arcs, app
 
 def delete_arc_main(values, arcs, app, selected_app, ref, nodes, main_dir):
+    if selected_app is None:
+        return arcs, app
     if is_different(values['-stemma_from-'], values['-stemma_to-']) is False:
         return arcs, app
     arcs, app = xp.delete_arc(app, values['-stemma_from-'], values['-stemma_to-'])
@@ -205,7 +226,8 @@ def refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_e
     update_units_row(all_apps, window, selected_app)
     update_rdgs(rdgs, window)
     update_available_names(rdgs, window)
-    update_arcs(window, arcs, dot_exists, ref, selected_app, main_dir, nodes)
+    if selected_app is not None:
+        update_arcs(window, arcs, dot_exists, ref, selected_app, main_dir, nodes)
 
 def open_graph():
     subprocess.Popen('.temp_graph.png', shell=True)
@@ -268,7 +290,7 @@ def get_graph_element():
 def get_layout(settings):
     units_row = initial_units_row()
     bt1, bt2, bt3, bt4 = initial_basetext_rows()
-    menu = [['File', ['!Save As', '---', 'Settings', 'About']]]
+    menu = [['File', ['!Save As', '---', 'Combine XML Files', '---', 'Settings', 'About']]]
     verse_frame = [[sg.Stretch(), sg.Button('<Prev', key='-prev_verse-', disabled=True), sg.Input('', key='-verse-'), sg.Button('Next>', key='-next_verse-', disabled=True), sg.Stretch()],
                    [sg.Stretch(), sg.Button('Update', key='-update_verse-', disabled=True), sg.Stretch()]]
     units_frame = [[sg.Button(' <Prev ', key='-prev_app-', disabled=True)] + units_row + [sg.Button(' Next> ', key='-next_app-', disabled=True)]]
@@ -345,7 +367,7 @@ def main():
                     xml_file = reformat_xml(xml_file)
                     window['-xml_input-'].update(value=xml_file)
                 try:
-                    tree, root, ab, ref, basetext, all_apps, selected_app, rdgs, arcs, nodes, app = xp.initialize_apparatus(xml_file)
+                    tree, root, ab, ref, basetext, all_apps, selected_app, rdgs, arcs, nodes, app = xp.initialize_apparatus(xml_file, settings['ignore'])
                     refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
                     set_buttons(window, app, ab)
                     enable_editing_buttons(window)
@@ -357,17 +379,17 @@ XML file must be the output of the ITSEE and INTF Collation Editor.', 'Failed to
                 sg.popup_quick_message('Select a valid XML TEI encoded apparatus.')
 
         elif event == '-update_verse-':
-            ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.load_new_verse(root, values['-verse-'])
+            ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.load_new_verse(root, values['-verse-'], settings['ignore'])
             refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
             set_buttons(window, app, ab)
 
         elif event == '-next_verse-':
-            ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.verse_from_ab(ab.getnext())
+            ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.verse_from_ab(ab.getnext(), settings['ignore'])
             refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
             set_buttons(window, app, ab)
 
         elif event == '-prev_verse-':
-            ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.verse_from_ab(ab.getprevious())
+            ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.verse_from_ab(ab.getprevious(), settings['ignore'])
             refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
             set_buttons(window, app, ab)
 
@@ -390,18 +412,26 @@ To save a copy, select "Save As" from the File menu.', 'Save Collation')
                 save_settings(settings, main_dir)
 
         elif event == '-update_reading-':
+            if selected_app is None or values['-edit_rdg-'] in ['', '        ', None]:
+                continue
             app, rdgs = xp.update_reading_type(app, values['-edit_type-'], values['-edit_rdg-'])
             refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
 
         elif event == '-delete_reading-':
+            if selected_app is None or values['-edit_rdg-'] in ['', '        ', None]:
+                continue
             app, rdgs = xp.delete_rdg(app, values['-edit_rdg-'])
             refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
 
         elif event == '-add_arc-':
+            if selected_app is None:
+                continue
             arcs, app = add_arc_main(arcs, values, app, selected_app, ref, nodes, main_dir)
             refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
 
         elif event == '-delete_arc-':
+            if selected_app is None:
+                continue
             arcs, app = delete_arc_main(values, arcs, app, selected_app, ref, nodes, main_dir)
             refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
 
@@ -415,13 +445,18 @@ To save a copy, select "Save As" from the File menu.', 'Save Collation')
                 settings['last_opened'] = fn
                 save_settings(settings, main_dir)
                 okay_popup(f'Saved to\n{fn}', 'Saved!')
-                
 
         elif event == 'Settings':
             settings = set_settings(settings, main_dir, icon)
 
         elif event == 'About':
-            readme_popup(main_dir, icon)        
+            readme_popup(main_dir, icon)
+
+        elif event == 'Combine XML Files':
+            result = combine_xml_files_interface(settings, icon, main_dir)
+            if result is not None:
+                settings = result
+                save_settings(settings, main_dir)
 
         # print(event, values)
     
@@ -447,7 +482,9 @@ def get_settings(main_dir):
             'theme': 'Parchment',
             'dpi': True,
             'last_opened': '',
-            'graph_bg_color': '#ffffff00'
+            'last_opened_dir': '',
+            'graph_bg_color': '#ffffff00',
+            'ignore': {'lac': False, 'subr': False}
         }
         with open(f'{main_dir}/resources/settings.json', 'w') as file:
             json.dump(settings, file, indent=4)

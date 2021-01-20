@@ -14,7 +14,8 @@ icon = "src/apparatusexplorer/resources/apparatusexplorer"
 sources = ['src/apparatusexplorer']
 requires = ['Pillow',
             'PySide2',
-            'lxml']
+            'lxml',
+            'natsort']
 
 
 [tool.briefcase.app.apparatusexplorer.macOS]

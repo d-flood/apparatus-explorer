@@ -72,3 +72,4 @@ settings.json
 pyside_lite/
 temp.xml
 combine_xml/
+start_*
