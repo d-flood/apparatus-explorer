@@ -1,7 +1,7 @@
 [tool.briefcase]
 project_name = "Apparatus Explorer"
 bundle = "com.davidfloodii.apparatusexplorer"
-version = "0.8"
+version = "0.9"
 url = "https://github.com/d-flood/apparatus-explorer"
 license = "MIT license"
 author = 'David Flood, II'

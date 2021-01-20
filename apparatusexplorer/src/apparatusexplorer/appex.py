@@ -325,7 +325,7 @@ def get_layout(settings):
 def main():
     settings = get_settings(main_dir)
     layout, dot_exists = get_layout(settings)
-    window = sg.Window('Apparatus Explorer v 0.8', layout, icon=icon, size=(1800, 500))
+    window = sg.Window('Apparatus Explorer v 0.9', layout, icon=icon, size=(1800, 500))
     root = None
     ###########################################################
     '''Main Loop'''
