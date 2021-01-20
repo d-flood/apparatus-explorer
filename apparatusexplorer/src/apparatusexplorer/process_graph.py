@@ -1,5 +1,5 @@
 from subprocess import call, CREATE_NO_WINDOW
-
+from time import sleep
 
 from PIL import Image, ImageOps
 
@@ -62,9 +62,17 @@ def make_graph(arcs: list, selected_app: str, ref: str, nodes: list, main_dir, b
 
     # fn = f'{output_dir}/graphs/{filename}' # since it seems better not to rely on saved pngs,
                                                  # I'll use a temp file instead
-
-    with open('.temp_graph.dot', 'w', encoding='utf-8') as file:
-        file.write(template)
+    try:
+        with open('.temp_graph.dot', 'w', encoding='utf-8') as file:
+            file.write(template)
+    except PermissionError:
+        print('Permission Error. Trying again')
+        sleep(.1)
+        try:
+            with open('.temp_graph.dot', 'w', encoding='utf-8') as file:
+                file.write(template)
+        except:
+            return    
 
     call(f"dot -Tpng .temp_graph.dot -o .temp_graph.png", creationflags=CREATE_NO_WINDOW)
 

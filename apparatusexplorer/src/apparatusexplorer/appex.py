@@ -30,10 +30,9 @@ sg.LOOK_AND_FEEL_TABLE['DarkMode'] = {'BACKGROUND': '#161D20',
                                         'BORDER': 3, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 0,
                                         }
 
-
 def okay_or_cancel(message: str, title: str):
     layout = [[sg.Text(message, pad=(10, 10))],
-        [sg.Button('Okay', size=(10, 2), pad=(10, 10), border_width=10), sg.Button('Cancel', size=(10, 2), pad=(10, 10), border_width=10)]]
+        [sg.Button('Okay'), sg.Stretch(), sg.Button('Cancel')]]
     popup = sg.Window(title, layout, icon=icon)
     response, _ = popup.read()
     popup.close()
@@ -41,7 +40,7 @@ def okay_or_cancel(message: str, title: str):
 
 def okay_popup(message: str, title: str):
     layout = [[sg.Text(message, pad=(10, 10))],
-        [sg.Button('Okay', pad=(10, 10), border_width=10)]]
+        [sg.Button('Okay')]]
     popup = sg.Window(title, layout, icon=icon)
     popup.read()
     popup.close()
@@ -50,7 +49,7 @@ def readme_popup(main_dir, icon):
     with open(f'{main_dir}/resources/README.txt', 'r', encoding='utf-8') as file:
         readme = file.read()
     layout = [[sg.Multiline(readme, size=(100, 50))],
-        [sg.Button('Close', pad=(10, 10), border_width=10)]]
+        [sg.Button('Close', pad=(10, 10))]]
     popup = sg.Window('About', layout, icon=icon)
     popup.read()
     popup.close()
@@ -97,25 +96,12 @@ def prepare_focus(focus):
     elif isinstance(focus, tuple):
         return [i for i in range(focus[0], focus[1]+1)]
 
-def initial_units_row():
-    # sg.theme('DarkTeal1')
-    row = []
-    for i in range(20):
-        row.append(sg.Text('', visible=False, key=f'unit{i}', justification='center', font='Cambria 12'))
-    return row
-
-def initial_basetext_row(settings): # working
-    # sg.theme('DarkTeal1')
-    row = []
-    for i in range(50):
-        row.append(sg.Text('', visible=False, key=f'bt{i}', justification='center', pad=(5, 5), font=f'{settings["greek_font"]}'))
-    return row
-
-def update_basetext(basetext, window, selected_app, greek_font):
+def update_basetext(basetext, window, selected_app):
     index = 2
     words = basetext.split()
+    i = None
     for i, word in zip(range(len(words)), words):
-        window[f'bt{i}'].update(value=f'{word}\n{index}', visible=True, background_color=determine_focus(index, selected_app), font=greek_font)
+        window[f'bt{i}'].update(value=f'{word}\n{index}', visible=True, background_color=determine_focus(index, selected_app))
         index += 2
     for n in range(i+1, 50):
         window[f'bt{n}'].update(visible=False)
@@ -127,6 +113,7 @@ def determine_focus(unit, focus):
         return sg.DEFAULT_BACKGROUND_COLOR
 
 def update_units_row(units: list, window, focus):
+    i = None
     for i, unit in zip(range(len(units)), units):
         unit_str = str(unit).replace('(', '')
         unit_str = unit_str.replace(')', '')
@@ -149,8 +136,8 @@ def format_rdgs(rdgs):
         # to_return.append('_'*40)
     return '\n'.join(to_return)
 
-def update_rdgs(rdgs, window, greek_text):
-    window['-rdgs-'].update(value=format_rdgs(rdgs), font=greek_text)
+def update_rdgs(rdgs, window):
+    window['-rdgs-'].update(value=format_rdgs(rdgs))
 
 def update_arcs_text(window, arcs):
     to_display = []
@@ -212,11 +199,11 @@ def delete_arc_main(values, arcs, app, selected_app, ref, nodes, main_dir):
     pg.make_graph(arcs, selected_app, ref, nodes, main_dir, graph_bg_color, graph_text_color, line_color, orientation)
     return arcs, app
 
-def refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font):
+def refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes):
     update_ref(window, ref)
-    update_basetext(basetext, window, selected_app, greek_font)
+    update_basetext(basetext, window, selected_app)
     update_units_row(all_apps, window, selected_app)
-    update_rdgs(rdgs, window, greek_font)
+    update_rdgs(rdgs, window)
     update_available_names(rdgs, window)
     update_arcs(window, arcs, dot_exists, ref, selected_app, main_dir, nodes)
 
@@ -240,52 +227,77 @@ def save_settings(settings, main_dir):
 #########################################################################
 """Layout and Main Loop"""
 #########################################################################
-def main():
-    settings = get_settings(main_dir)
-    greek_font = settings['greek_font']
-    basetext_row = initial_basetext_row(settings)
+def initial_basetext_rows():
+    row1 = []
+    row2 = []
+    row3 = []
+    row4 = []
+    key = 0
+    for _ in range(20):
+        row1.append(sg.Text('', visible=False, key=f'bt{key}', justification='center', pad=(2, 3)))
+        row1.append(sg.Stretch())
+        key += 1
+    for _ in range(20):
+        row2.append(sg.Text('', visible=False, key=f'bt{key}', justification='center', pad=(2, 3)))
+        row2.append(sg.Stretch())
+        key += 1
+    for _ in range(20):
+        row3.append(sg.Text('', visible=False, key=f'bt{key}', justification='center', pad=(2, 3)))
+        row3.append(sg.Stretch())
+        key += 1
+    for _ in range(20):
+        row4.append(sg.Text('', visible=False, key=f'bt{key}', justification='center', pad=(2, 3)))
+        row4.append(sg.Stretch())
+        key += 1
+    return row1, row2, row3, row4
+
+def initial_units_row():
+    row = []
+    for i in range(20):
+        row.append(sg.Text('', visible=False, key=f'unit{i}', justification='center', pad=(2, 3)))
+    return row
+
+def get_graph_element():
+    dot_exists = find_executable('dot')
+    if dot_exists:
+        graph_elem = sg.Image(filename=f'{main_dir}/resources/blank_graph.png', key='-graph-', enable_events=True)
+    else:
+        graph_elem = sg.Text('', key='-graph-')
+    return [[graph_elem]], dot_exists
+
+def get_layout(settings):
     units_row = initial_units_row()
+    bt1, bt2, bt3, bt4 = initial_basetext_rows()
     menu = [['File', ['!Save As', '---', 'Settings', 'About']]]
+    verse_frame = [[sg.Stretch(), sg.Button('<Prev', key='-prev_verse-', disabled=True), sg.Input('', key='-verse-'), sg.Button('Next>', key='-next_verse-', disabled=True), sg.Stretch()],
+                   [sg.Stretch(), sg.Button('Update', key='-update_verse-', disabled=True), sg.Stretch()]]
+    units_frame = [[sg.Button(' <Prev ', key='-prev_app-', disabled=True)] + units_row + [sg.Button(' Next> ', key='-next_app-', disabled=True)]]
 
-    verse_frame = [[sg.Button('<Prev', key='-prev_verse-', disabled=True), sg.Input('', size=(25, 2), key='-verse-'), sg.Button('Next>', key='-next_verse-', disabled=True)],
-                   [sg.Button('Update', key='-update_verse-', disabled=True)]]
-    
-    units_frame = [[sg.Button(' <Prev ', size_px=(120, 65), key='-prev_app-', disabled=True)] + units_row + [sg.Button(' Next> ', size_px=(120, 65), key='-next_app-', disabled=True)]]
-
-    basetext_frame = [basetext_row]
-
-    upper_column = [
-        [sg.Frame('', verse_frame)],
-        [sg.Frame('Variation Units', units_frame)],
-        [sg.Frame('Basetext', basetext_frame)]
-    ]
+    basetext_frame = [bt1, bt2, bt3, bt4]
 
     edit_readings_frame = [
-        [sg.Text('Reading:', size=(20, 2)), sg.Combo([' ', ' '], size=(10, 2), readonly=True, key='-edit_rdg-')],
-        [sg.Text('Type:', size=(20, 2)), sg.Combo(['Defective', 'Orthographic', 'Lacunose', 'Subreading'], size=(20, 2), readonly=True, key='-edit_type-')],
+        [sg.Text('')],
+        [sg.Text('Reading:'), sg.Combo(['        '], readonly=True, key='-edit_rdg-')],
+        [sg.Text('Type:'), sg.Combo(['Defective', 'Orthographic', 'Lacunose', 'Subreading'], readonly=True, key='-edit_type-')],
+        [sg.Text('')],
+        [sg.Text('')],
+        [sg.Text('')],
         [sg.Button('Update', key='-update_reading-', disabled=True)],
         [sg.Button('Delete', key='-delete_reading-', disabled=True)]
     ]
-
     edit_stemma_frame = [
-        [sg.Combo([' ', ' '], size=(10, 2), readonly=True, key='-stemma_from-'),
-                sg.Text('➜', size=(10, 2), justification='center'),
-                sg.Combo([' ', ' '], size=(10, 2), readonly=True, key='-stemma_to-')],
+        [sg.Text('')],
+        [sg.Combo(['        '], readonly=True, key='-stemma_from-'),
+                sg.Text('➜', justification='center'),
+                sg.Combo(['        '], readonly=True, key='-stemma_to-')],
+        [sg.Text('')],
+        [sg.Text('')],
+        [sg.Text('')],
+        [sg.Text('')],
         [sg.Button('Add Relationship', key='-add_arc-', disabled=True)],
         [sg.Button('Delete Relationship', key='-delete_arc-', disabled=True)]
     ]
-
-    dot_exists = find_executable('dot')
-    if dot_exists:
-        graph_elem = sg.Image(filename=None, key='-graph-', enable_events=True)
-    else:
-        graph_elem = sg.Text('', key='-graph-')
-
-    stemma_frame = [[graph_elem]]
-
-    edit_column = [[sg.Frame('Local Stemma', stemma_frame, element_justification='center'),
-                        sg.Frame('Edit Readings', edit_readings_frame, element_justification='left'), 
-                        sg.Frame('Edit Local Stemma', edit_stemma_frame, element_justification='center')]]
+    stemma_frame, dot_exists = get_graph_element()
 
     xml_input_frame = [
         [sg.Text('TEI XML Collation File:'), 
@@ -298,18 +310,27 @@ def main():
     layout = [
         [sg.Menu(menu, key='-menu-')],
         [sg.Text('XML TEI Apparatus Explorer and Editor', justification='center')],
-        [sg.Column(upper_column, element_justification='center')],
-        [sg.MultilineOutput('', size=(200, 8), font=f'{settings["greek_font"]}', key='-rdgs-')],
-        [sg.Column(edit_column)],
+        [sg.Frame('', verse_frame, border_width=3)],
+        [sg.Frame('Variation Units', units_frame)],
+        [sg.Frame('Basetext', basetext_frame)],
+        [sg.MultilineOutput('', key='-rdgs-')],
+        [sg.Frame('Local Stemma', stemma_frame),
+                        sg.Frame('Edit Readings', edit_readings_frame), 
+                        sg.Frame('Edit Local Stemma', edit_stemma_frame)],
         [sg.Frame('', xml_input_frame)]
     ]
 
-    window = sg.Window('Apparatus Explorer v 0.8', layout, icon=icon)
+    return layout, dot_exists
+
+def main():
+    settings = get_settings(main_dir)
+    layout, dot_exists = get_layout(settings)
+    window = sg.Window('Apparatus Explorer v 0.8', layout, icon=icon, size=(1800, 500))
     root = None
     ###########################################################
     '''Main Loop'''
     ###########################################################
-
+    ref = basetext = all_apps = selected_app = rdgs = nodes = ab = tree = initial_fn = app = arcs = None
     while True:
         event, values = window.read()
         
@@ -325,7 +346,7 @@ def main():
                     window['-xml_input-'].update(value=xml_file)
                 try:
                     tree, root, ab, ref, basetext, all_apps, selected_app, rdgs, arcs, nodes, app = xp.initialize_apparatus(xml_file)
-                    refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+                    refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
                     set_buttons(window, app, ab)
                     enable_editing_buttons(window)
                     initial_fn = values['-xml_input-']
@@ -337,27 +358,27 @@ XML file must be the output of the ITSEE and INTF Collation Editor.', 'Failed to
 
         elif event == '-update_verse-':
             ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.load_new_verse(root, values['-verse-'])
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
             set_buttons(window, app, ab)
 
         elif event == '-next_verse-':
             ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.verse_from_ab(ab.getnext())
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
             set_buttons(window, app, ab)
 
         elif event == '-prev_verse-':
             ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab = xp.verse_from_ab(ab.getprevious())
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
             set_buttons(window, app, ab)
 
         elif event == '-next_app-':
             selected_app, rdgs, arcs, nodes, app = xp.load_app(app, 'next')
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
             set_buttons(window, app, ab)
 
         elif event == '-prev_app-':
             selected_app, rdgs, arcs, nodes, app = xp.load_app(app, 'prev')
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
             set_buttons(window, app, ab)
 
         elif event == '-save_xml-':
@@ -370,19 +391,19 @@ To save a copy, select "Save As" from the File menu.', 'Save Collation')
 
         elif event == '-update_reading-':
             app, rdgs = xp.update_reading_type(app, values['-edit_type-'], values['-edit_rdg-'])
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
 
         elif event == '-delete_reading-':
             app, rdgs = xp.delete_rdg(app, values['-edit_rdg-'])
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
 
         elif event == '-add_arc-':
             arcs, app = add_arc_main(arcs, values, app, selected_app, ref, nodes, main_dir)
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
 
         elif event == '-delete_arc-':
             arcs, app = delete_arc_main(values, arcs, app, selected_app, ref, nodes, main_dir)
-            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes, greek_font)
+            refresh_gui(window, ref, basetext, all_apps, selected_app, rdgs, arcs, dot_exists, main_dir, nodes)
 
         elif event == '-graph-':
             open_graph()
@@ -424,7 +445,6 @@ def get_settings(main_dir):
         settings = {
             'graph_orientation': 'rankdir="LR"',
             'theme': 'Parchment',
-            'greek_font': 'Cambria 12',
             'dpi': True,
             'last_opened': '',
             'graph_bg_color': '#ffffff00'
@@ -440,7 +460,7 @@ graph_bg_color = settings['graph_bg_color']
 graph_text_color, selected_app_color, color_theme, line_color = get_theme(settings['theme'])
 sg.theme(color_theme)
 icon = f'{main_dir}/resources/apparatusexplorer.ico'
-sg.set_options(font='Cambria 12', element_padding=(10, 5), icon=icon)
+sg.set_options(font=('Cambria', 12), element_padding=(3, 5))
 
 try:
     ctypes.windll.shcore.SetProcessDpiAwareness(settings['dpi']) # High resolution Windows machines have scaling issues

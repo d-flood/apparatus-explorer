@@ -71,3 +71,4 @@ settings.json
 .temp_*
 pyside_lite/
 temp.xml
+combine_xml/

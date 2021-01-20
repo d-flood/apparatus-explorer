@@ -12,24 +12,24 @@ def make_layout(settings):
     else:
         transparent, white = False, True
     graphviz_frame = [
-        [sg.Text('Graph Orientation:', size=(30, 2)), 
+        [sg.Text('Graph Orientation:'), sg.Stretch(),
                 sg.Radio('Vertical', '-orientation-', default=vertical, key='-vertical-', enable_events=True), 
                 sg.Radio('Horizontal', '-orientation-', default=horizontal, key='horizontal')],
-        [sg.Text('Graph Background Color:', size=(30, 2)), 
+        [sg.Text('Graph Background Color:'), sg.Stretch(), 
                 sg.Radio('Transparent', '-graph_bg_color-', default=transparent, key='-graph_transparent-'), 
                 sg.Radio('White', '-graph_bg_color-', default=white, key='-graph_white-')],
     ]
     app_settings_frame = [
-        [sg.Text('Color Theme:', size=(30, 2)), 
+        [sg.Text('Color Theme:'), sg.Stretch(), 
             sg.Drop(['Grey', 'Dark Mode', 'Parchment', 'System Default'],
-                      default_value=settings['theme'], size=(30, 2), key='-theme-', readonly=True)],
+                      default_value=settings['theme'], key='-theme-', readonly=True)],
         [sg.Text('DPI Awareness:', size=(30, 2)), sg.DropDown(['0', '1', '2', 'True', 'False'],
-                  size=(30, 2), key='-dpi-', readonly=True, default_value=str(settings['dpi']))]
+                  key='-dpi-', readonly=True, default_value=str(settings['dpi']))]
     ]
     return [
         [sg.Frame('GraphViz Settings', graphviz_frame, border_width=5)],
         [sg.Frame('Apparatus Exploer Settings', app_settings_frame, border_width=5)],
-        [sg.Button('Save Settings', border_width=10), sg.Button('Cancel', border_width=10), sg.Button('Done', border_width=10)]
+        [sg.Button('Save Settings'), sg.Button('Cancel'), sg.Button('Done')]
     ]
 
 def save_settings(main_dir, settings, values):
