@@ -25,7 +25,7 @@ The Apparatus Explorer was packaged with Briefcase from the BeeWare Project (htt
 - `lxml`
 - `Pillow`
 - `PySide2` - This is a large library. A 'lite' version is included with the MSI Windows installer.
-- `PySimpleGUIQt` - This is an abstracted API for working with PySide2--it helped to significantly speed up development time (in addition to facilitating the use of colorful themes). While PySimpleGUIQt can be pip installed, it should be downloaded from its repository and placed into `apparatusexplorer/src/apparatusexplorer`--this is how the main module expects to import it.
+- `PySimpleGUIQt` - This is an abstracted API for working with PySide2--it helped to significantly speed up development time (in addition to facilitating the use of colorful themes).
 - GraphViz is optional but recommended.
 
 To start the Apparatus Explorer on any platform with the above dependencies in place: 
