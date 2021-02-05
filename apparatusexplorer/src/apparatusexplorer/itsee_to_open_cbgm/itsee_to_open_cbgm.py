@@ -219,7 +219,8 @@ def reformat_xml(xml_path):
     input_addr = xml_path
     output_addr = input_addr.replace('.xml', '_reformatted.xml')
     #Read and modify the XML:
-    xml = et.parse(input_addr)
+    parser = et.XMLParser(remove_blank_text=True, recover=True)
+    xml = et.parse(input_addr, parser)
     add_tei_header(xml)
     strip_wit_subelements(xml)
     strip_unitless_apps(xml)

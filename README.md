@@ -1,5 +1,5 @@
 # Apparatus Explorer
-![](images/appex_example.gif)
+![](images/appex_example_v0.9.gif)
 This tool does does a few things:
 * Visualization of a TEI XML encoded critical apparatus
 * Facilitates adding edges to variation units and reading types.
@@ -7,9 +7,9 @@ This tool does does a few things:
 
 The Apparatus Explorer is primarily for conveniently viewing a digital apparatus with integrated local stemma graphs and preparing the apparatus file for use in the open-cbgm library (https://github.com/jjmccollum/open-cbgm-standalone).
 
-The CBGM can only be fully utilized if the direction of relationship between each reading in a variation unit is encoded. This is what the Apparatus Explorer was made to help. It was (and is) developed during my PhD studies to help with my broader project in New Testament Textual Criticism.
+The CBGM can only be fully utilized if the direction of relationship between each reading in a variation unit is encoded. This is what the Apparatus Explorer was made to help. It was (and is being) developed during my PhD studies to help with my broader project in New Testament Textual Criticism.
 
-This is a companion tool to [Tendon](https://github.com/d-flood/tendon/), which was designed for simplifying the process of transcription to collation, while the Apparatus Explorer is for editing the collation output.
+
 ![](images/appex_parchment.png)
 ![](images/appex_dark_navigation_example.gif)
 # Tutorial
@@ -18,26 +18,29 @@ This is a companion tool to [Tendon](https://github.com/d-flood/tendon/), which 
 #### **Windows Package**
 For Windows users, only the MSI installer is necessary. The installer includes everything that is needed except for [GraphViz](https://graphviz.org/), which is recommended but optional. If GraphViz is installed and added to path, the Apparatus Explorer will display a PNG graph of the local stemma. If GraphViz is not installed, then the Apparatus Explorer will display a plain text representation of the same data.
 
-The Apparatus Explorer was packaged with Briefcase from the BeeWare Project (https://github.com/beeware/briefcase)
+The Apparatus Explorer was packaged with Briefcase from the Beeware Project (https://github.com/beeware/briefcase)
 
 #### **Running from Source**
 - Python 3.6+ should be okay, but it was developed in 3.8
 - `lxml`
 - `Pillow`
 - `PySide2` - This is a large library. A 'lite' version is included with the MSI Windows installer.
-- `PySimpleGUIQt` - This is an abstracted API for working with PySide2--it helped to significantly speed up development time (in addition to facilitating the use of colorful themes). While PySimpleGUIQt can be pip installed, it should be downloaded from its repository and placed into `apparatusexplorer/src/apparatusexplorer`--this is how the main module expects to import it.
-- GraphViz is optional but recommended.
+- `PySimpleGUIQt` - This is an abstracted API for working with PySide2--it helped to significantly speed up development time (in addition to facilitating the use of colorful themes).
+- [GraphViz](https://graphviz.org/) is optional but recommended.
 
-To start the Apparatus Explorer on any platform with the above dependencies in place: 
+To start the Apparatus Explorer on any platform* with the above dependencies in place: 
 - Clone or download this repository
 - Navigate to `apparatusexplorer/src`
 - Run `python -m apparatusexplorer`
 
+\* *NB*: The GUI needs significant tweaking for the proportions to look right on MacOS. It is not tested on Linus.
+
 ## Getting Started with the Apparatus Explorer
 
 1. Begin with the XML output from the Collation Editor from ITSEE at the University of Birmingham (https://github.com/itsee-birmingham/standalone_collation_editor).
+    - This presumes that transcriptions files have already been properly tokenized and encoded in JSON files, then collated with the Collation Editor. If you are unfamiliar with the Collation Editor, see "A Note About the Collation Editor" below.
     - The Collation Editor works best one verse at a time. This will produce many single-verse collation files. 
-    - These should be combined into chapter and whole book collation files. I have developed a tool for automating this and will release it as an added feature to Tendon.
+    - These should be combined into chapter and whole book collation files. The Apparatus Explorer can combine XML files, find this tool under File.
 
 2. Launch the Apparatus Explorer (either by clicking on the shortcut after installing on Windows after installing with the MSI file or running from source as described above).
 
@@ -68,3 +71,8 @@ To start the Apparatus Explorer on any platform with the above dependencies in p
   - Color Theme: There are currently four color themes. I recommend "Parchment" or "Dark Mode", both themes that I designed with my own eyes in mind.
   - DPI Awareness is to fix scaling problems that can occur on high resolution Windows computers. It should not need to be changed, but if the app looks blurry, experiment with the options.
   - Note that the application must be restarted for themes or DPI awareness changes to take effect.
+
+### A Note About the Collation Editor
+The easiest way to prepare transcription files in a compatible format is to either:
+  1. Use [TranscriptEdit](https://github.com/d-flood/transcribedit) to transcribe the witness. TranscriptEdit allows the user to transcribe in plain text and immediately add any desired transcription encodings such as corrections and lacunae. The file is then saved as a JSON file, no conversion necessary. Since TranscriptEdit was developed specifically for preparing transcriptions for the Collation Editor, it works one verse (or other collation unit) at a time. This simplifies some things, but it will be a major drawback for some. Since page, column, and line breaks can be encoded with TranscriptEdit, a future goal is to add support for exporting the transcription in its exact page layout to a docx file. Essentially, this feature will be added as soon as I need it for sharing my own research.
+  2. Transcribe in plain text and use [Tendon](https://github.com/d-flood/Tendon) to tokenize the transcription and save it as JSON files. In my current workflow, Tendon is deprecated and I will eventually publish its replacement. The conversion from XML TEI encoded transcription files to the tokenized JSON input files required for the Collation Editor is difficult. Errors in the transcription _will_ result. This is true of Tendon's XML to JSON tool, and it is true of the tool used to create the JSON transcription files on the INTF NT.VMR (see [here](https://ntvmr.uni-muenster.de/community/vmr/api/transcript/get/?docID=20001&indexContent=Matt%20inscriptio;%20Matt%201:1-25;%20Matt%202:1-5&pageID=40&format=wce) for an example). In short, a general purpose and reliable conversion tool does not exist for transforming TEI XML transcriptions encoded using the ITSEE [Online Transcription Editor](https://itsee-wce.birmingham.ac.uk/ote/transcriptiontool). Tokenization of plain text transcription files is trivial and Tendon works very well for this. However, this means that _only_ the text of the transcription is encoded in the JSON file and not desirable encodings such as corrections and gaps.
