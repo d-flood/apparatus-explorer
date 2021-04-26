@@ -6,6 +6,7 @@ import re
 import subprocess
 
 from apparatusexplorer.combine_xml import combine_xml_files_interface
+import apparatusexplorer.differentiate_subreading_ids as ds
 from apparatusexplorer.itsee_to_open_cbgm.itsee_to_open_cbgm import reformat_xml
 import apparatusexplorer.process_graph as pg
 from apparatusexplorer.set_settings import set_settings
@@ -365,6 +366,7 @@ def main():
                 if is_xml_reformatted(xml_file) is False:
                     sg.popup_quick_message('Reformatting XML file...')
                     xml_file = reformat_xml(xml_file)
+                    xml_file = ds.differentiate_subreading_ids(xml_file)
                     window['-xml_input-'].update(value=xml_file)
                 try:
                     tree, root, ab, ref, basetext, all_apps, selected_app, rdgs, arcs, nodes, app = xp.initialize_apparatus(xml_file, settings['ignore'])
