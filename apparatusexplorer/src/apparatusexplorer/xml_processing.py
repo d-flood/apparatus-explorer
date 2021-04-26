@@ -1,3 +1,4 @@
+from typing import List, Tuple, Union, Dict
 import lxml.etree as et
 
 ########################################################################
@@ -15,7 +16,7 @@ def get_xml_file(fn):
     tree = et.parse('temp.xml', parser)
     return tree.getroot(), tree
 
-def construct_basetext(ab):
+def construct_basetext(ab: et._Element) -> str:
     # this is the element containing a whole verse unit
     # this is the verse str
     # begin constructing lemma
@@ -27,7 +28,8 @@ def construct_basetext(ab):
             basetext.append(elem.find('lem').text)
     return ' '.join(basetext)
 
-def get_all_apps(ab, ignore: dict):
+def get_all_apps(ab: et._Element, ignore: dict) -> Union[List[int], List[Tuple[int]]]:
+    '''returns a list of ints and/or tuples of ints'''
     apps = ab.findall('app')
     if apps is None:
         return None
@@ -55,7 +57,8 @@ def get_focus_app(app):
     else:
         return (int(app.get("from")), (int(app.get("to"))))
 
-def get_all_rdgs(app):
+def get_all_rdgs(app: et._Element) -> List[Dict[str, str]]:
+    '''returns a list of dicts; no _Elements'''
     if app is None:
         return None
     readings = []
@@ -74,7 +77,7 @@ def get_all_rdgs(app):
                          'wits': wits})
     return readings
 
-def get_arcs(app):
+def get_arcs(app: et._Element) -> Tuple[List[Dict[str, str]], List[str]]:
     if app is None:
         return None, None
     graph = app.find('note/graph')
@@ -88,12 +91,13 @@ def get_arcs(app):
         nodes.append(node.get('n'))
     return arcs, nodes
 
-def select_verse(root, verse):
+def select_verse(root: et._Element, verse) -> et._Element:
+    '''selects and returns the verse element'''
     verse = f'{verse}-APP'
     ab = root.find(f'ab[@verse="{verse}"]')
     return ab
 
-def save_xml(tree, fn):
+def save_xml(tree: et._ElementTree, fn: str):
     et.indent(tree, '    ')
     tree.write(fn, pretty_print=True, encoding='utf-8')
     with open(fn, 'r', encoding='utf-8') as file:
@@ -108,7 +112,7 @@ def save_xml(tree, fn):
 '''Complex Functions'''
 ##########################################################################
 # This gets the xml file finds the first app of the first verse
-def initialize_apparatus(fn, ignore):
+def initialize_apparatus(fn: str, ignore: 'dict[bool]'):
     root, tree = get_xml_file(fn)
     ab = root.find('ab')
     ref = ab.get('verse').replace('-APP', '')
@@ -131,7 +135,7 @@ def load_new_verse(root, verse, ignore):
     arcs, nodes = get_arcs(app)
     return ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab
 
-def verse_from_ab(ab, ignore):
+def verse_from_ab(ab: et._Element, ignore):
     ref = ab.get('verse').replace('-APP', '')
     basetext = construct_basetext(ab)
     all_apps = get_all_apps(ab, ignore)
@@ -141,7 +145,7 @@ def verse_from_ab(ab, ignore):
     arcs, nodes = get_arcs(app)
     return ref, basetext, all_apps, app, selected_app, rdgs, arcs, nodes, ab
 
-def load_app(app, direction: str):
+def load_app(app: et._Element, direction: str) -> Tuple[Union[int, Tuple[int, int], None], List[Dict[str, str]], List[Dict[str, str]], List[str], et._Element]:
     if direction == 'next':
         while True:
             app = app.getnext()
@@ -160,7 +164,7 @@ def load_app(app, direction: str):
 ####################################################
 '''Editing XML File'''
 ####################################################
-def update_reading_type(app, new_attrib: str, name: str):
+def update_reading_type(app: et._Element, new_attrib: str, name: str):
     if new_attrib == 'Defective':
         new_attrib = 'def'
     elif new_attrib == 'Orthographic':
@@ -176,7 +180,7 @@ def update_reading_type(app, new_attrib: str, name: str):
     rdgs = get_all_rdgs(app)
     return app, rdgs
 
-def delete_rdg(app, rdg_n):
+def delete_rdg(app: et._Element, rdg_n):
     rdgs = app.findall('rdg')
     for rdg in rdgs:
         if rdg.attrib['n'] == rdg_n:
@@ -185,7 +189,7 @@ def delete_rdg(app, rdg_n):
     all_rdgs = get_all_rdgs(app)
     return app, all_rdgs
 
-def add_arc(app, arc_from: str, arc_to: str):
+def add_arc(app: et._Element, arc_from: str, arc_to: str):
     all_arcs, _ = get_arcs(app)
     # test to see if new arc is a duplicate
     for arc in all_arcs:
@@ -199,7 +203,7 @@ def add_arc(app, arc_from: str, arc_to: str):
     all_arcs, _ = get_arcs(app)
     return all_arcs, app
 
-def delete_arc(app, arc_from: str, arc_to: str):
+def delete_arc(app: et._Element, arc_from: str, arc_to: str):
     arcs = app.findall('note/graph/arc')
     for arc in arcs:
         if arc.attrib['from'] == arc_from and arc.attrib['to'] == arc_to:
