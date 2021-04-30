@@ -15,6 +15,9 @@ The CBGM can only be fully utilized if the direction of relationship between eac
 # Tutorial
 ## Installing
 ### Dependencies
+#### **Web App**
+![](images/online_apparatus_explorer.png)
+There is now a [web app version available](https://www.davidaflood.com/appex/demo/). The web app is approaching feature parity with the desktop app. See [this blog post for more information](https://www.davidaflood.com/blog/an-online-digital-critical-apparatus/).
 #### **Windows Package**
 For Windows users, only the MSI installer is necessary. The installer includes everything that is needed except for [GraphViz](https://graphviz.org/), which is recommended but optional. If GraphViz is installed and added to path, the Apparatus Explorer will display a PNG graph of the local stemma. If GraphViz is not installed, then the Apparatus Explorer will display a plain text representation of the same data.
 
