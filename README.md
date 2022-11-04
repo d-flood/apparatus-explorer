@@ -1,6 +1,7 @@
-# Apparatus Explorer
-NOTE: This desktop application has been replaced by the web app: https://apparatusexplorer.com/. The Web App has the same functionality but also works on mobile devices.
 
+# Deprecated: This desktop application has been replaced by the web app: https://apparatusexplorer.com/. The Web App has surpassed parity with the desktop version and also works on mobile devices.
+
+## Apparatus Explorer
 ![](images/appex_example_v0.9.gif)
 This tool does does a few things:
 * Visualization of a TEI XML encoded critical apparatus
@@ -14,18 +15,18 @@ The CBGM can only be fully utilized if the direction of relationship between eac
 
 ![](images/appex_parchment.png)
 ![](images/appex_dark_navigation_example.gif)
-# Tutorial
-## Installing
-### Dependencies
-#### **Web App**
+## Tutorial
+### Installing
+#### Dependencies
+##### **Web App**
 ![](images/online_apparatus_explorer.png)
 There is now a [web app version available](https://apparatusexplorer.com/). The web app has approached feature parity with the desktop app. See [here for more information](https://apparatusexplorer.com/about/).
-#### **Windows Package**
+##### **Windows Package**
 For Windows users, only the MSI installer is necessary. The installer includes everything that is needed except for [GraphViz](https://graphviz.org/), which is recommended but optional. If GraphViz is installed and added to path, the Apparatus Explorer will display a PNG graph of the local stemma. If GraphViz is not installed, then the Apparatus Explorer will display a plain text representation of the same data.
 
 The Apparatus Explorer was packaged with Briefcase from the Beeware Project (https://github.com/beeware/briefcase)
 
-#### **Running from Source**
+##### **Running from Source**
 - Python 3.6+ should be okay, but it was developed in 3.8
 - `lxml`
 - `Pillow`
@@ -40,7 +41,7 @@ To start the Apparatus Explorer on any platform* with the above dependencies in 
 
 \* *NB*: The GUI needs significant tweaking for the proportions to look right on MacOS. It is not tested on Linus.
 
-## Getting Started with the Apparatus Explorer
+### Getting Started with the Apparatus Explorer
 
 1. Begin with the XML output from the Collation Editor from ITSEE at the University of Birmingham (https://github.com/itsee-birmingham/standalone_collation_editor).
     - This presumes that transcriptions files have already been properly tokenized and encoded in JSON files, then collated with the Collation Editor. If you are unfamiliar with the Collation Editor, see "A Note About the Collation Editor" below.
@@ -57,7 +58,7 @@ To start the Apparatus Explorer on any platform* with the above dependencies in 
 
 6. From here one can begin to edit the local stemma for each variation unit and change the reading type attributes.
 
-### Application Interface
+#### Application Interface
 - Use the "Prev" and "Next" buttons to either side of the Reference input at the top of the app to navigate to the next or previous verse.
 - One can also navigate to a different verse by typing the reference into the upper input field and clicking "Update".
 - The frame labeled "Variation Units" shows all of the variation units for the present verse. The each number (or range of numbers) in this frame identifies a variation unit. This index units were assigned during collation. The highlighted number (or number range) is the currently selected variation unit. Clicking "Prev" and "Next" in this frame navigates to the previous and next variation unit.
@@ -77,7 +78,7 @@ To start the Apparatus Explorer on any platform* with the above dependencies in 
   - DPI Awareness is to fix scaling problems that can occur on high resolution Windows computers. It should not need to be changed, but if the app looks blurry, experiment with the options.
   - Note that the application must be restarted for themes or DPI awareness changes to take effect.
 
-### A Note About the Collation Editor
+#### A Note About the Collation Editor
 The easiest way to prepare transcription files in a compatible format is to either:
   1. Use [TranscriptEdit](https://github.com/d-flood/transcribedit) to transcribe the witness. TranscriptEdit allows the user to transcribe in plain text and immediately add any desired transcription encodings such as corrections and lacunae. The file is then saved as a JSON file, no conversion necessary. Since TranscriptEdit was developed specifically for preparing transcriptions for the Collation Editor, it works one verse (or other collation unit) at a time. This simplifies some things, but it will be a major drawback for some. Since page, column, and line breaks can be encoded with TranscriptEdit, a future goal is to add support for exporting the transcription in its exact page layout to a docx file. Essentially, this feature will be added as soon as I need it for sharing my own research.
   2. Transcribe in plain text and use [Tendon](https://github.com/d-flood/Tendon) to tokenize the transcription and save it as JSON files. In my current workflow, Tendon is deprecated and I will eventually publish its replacement. The conversion from XML TEI encoded transcription files to the tokenized JSON input files required for the Collation Editor is difficult. Errors in the transcription _will_ result. This is true of Tendon's XML to JSON tool, and it is true of the tool used to create the JSON transcription files on the INTF NT.VMR (see [here](https://ntvmr.uni-muenster.de/community/vmr/api/transcript/get/?docID=20001&indexContent=Matt%20inscriptio;%20Matt%201:1-25;%20Matt%202:1-5&pageID=40&format=wce) for an example). In short, a general purpose and reliable conversion tool does not exist for transforming TEI XML transcriptions encoded using the ITSEE [Online Transcription Editor](https://itsee-wce.birmingham.ac.uk/ote/transcriptiontool). Tokenization of plain text transcription files is trivial and Tendon works very well for this. However, this means that _only_ the text of the transcription is encoded in the JSON file and not desirable encodings such as corrections and gaps.
